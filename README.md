@@ -1,4 +1,4 @@
-# Web app
+# MBInfo Chrome Extension and web app
 
 Configuration
 =============
@@ -24,7 +24,7 @@ Build by `ant build`.
 Deployment process for wiki web app
 -----------------------------------
 
-Do build process.
+Run build process without error before deployment.
 
 Update build version `mbi-app-ver-patch` (and `major`, `minor`) in `build.xml`
 file.
@@ -64,6 +64,8 @@ Run `ant crx` to package crx file. This will update `publish.dir` with necessary
 contents in extension folder and zip as `extensions.zip`. Submit `extension.zip` in `publish.dir`
 to [chrome web store](https://chrome.google.com/webstore/developer/dashboard).
 
+[The app](https://chrome.google.com/webstore/detail/mbinfo-wiki-editor/fcojbcccmkgamiifkdkkcplcjniiemmj) can be installed from Chrome store. It is available to anyone, but not browsable.
+
 
 Google cloud storage setup
 --------------------------
@@ -71,12 +73,16 @@ Google cloud storage setup
 Static web site is, currently, run on GCS backend. Creating bucket and configuration
 can be found in `js/wiki/bucket/readme.md`.
 
+See more in [Google cloud portal](https://cloud.google.com).
+
 
 AWS CloudFront setup
 --------------------
 
 Optionally, to improve static content load performance, a CDN may setup. We are using
 AWS CloudFront for HTML, CSS, FONT contents.
+
+See more on [AWS console](https://console.aws.amazon.com).
 
 
 Security
