@@ -102,7 +102,7 @@ mbi.ui.installScrollFloater = function() {
     floater.decorate(right_bar);
     var function_box_height = 241;
     var size = goog.dom.getViewportSize();
-    scroller.style.maxHeight = (size.height - function_box_height - 20) + 'px';
+    scroller.style.maxHeight = (size.height - function_box_height - 24) + 'px';
     /*
     goog.events.listen(floater, [goog.ui.ScrollFloater.EventType.DOCK,
       goog.ui.ScrollFloater.EventType.PIN,
