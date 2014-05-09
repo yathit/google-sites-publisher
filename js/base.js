@@ -1,24 +1,8 @@
 /**
- * @fileoverview Base variables.
+ * @fileoverview Application configuration variables.
  */
 
 goog.provide('mbi.app.base');
-
-
-/**
- * @const
- * @type {string}
- */
-mbi.app.base.LOCAL_STORE_PREFIX = 'app';
-
-
-/**
- * @enum {string}
- */
-mbi.app.base.SessionKey = {
-  LAST_URL: 'lu',
-  USER_SETTING: 'st'
-};
 
 
 /**
@@ -52,21 +36,22 @@ mbi.app.base.VERSION = mbi.app.base.VERSION_MAJOR + '.' +
  * @const
  * @type {string}
  */
-mbi.app.base.PREVIOUS_STABLE = '1.5.2';
+mbi.app.base.PREVIOUS_STABLE = '1.5.15';
+
+
+/**
+ * Stable version
+ * @const
+ * @type {string}
+ */
+mbi.app.base.VERSION_STABLE = '1.6.0';
 
 
 /**
  * @const
  * @type {string}
  */
-mbi.app.base.VERSION_STABLE = '1.5.15';
-
-
-/**
- * @const
- * @type {string}
- */
-mbi.app.base.VERSION_BETA = '1.5.15';
+mbi.app.base.VERSION_BETA = '1.6.0';
 
 
 /**
@@ -401,3 +386,20 @@ mbi.app.base.SITEMAP_HELP_URL =
  */
 mbi.app.base.SITEMAP_HOME_URL =
     mbi.app.base.buildSitemapCacheUrl('home');
+
+
+/**
+ * Prefix for local storage key.
+ * @const
+ * @type {string}
+ */
+mbi.app.base.LOCAL_STORE_PREFIX = 'app';
+
+
+/**
+ * @enum {string}
+ */
+mbi.app.base.SessionKey = {
+  LAST_URL: 'lu',
+  USER_SETTING: 'st'
+};

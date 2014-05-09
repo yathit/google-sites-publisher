@@ -1,15 +1,22 @@
 # MBInfo Chrome Extension and web app
 
 Configuration
-=============
+-------------
 
 Hardcoded application setting, like bucket name, site name are defined in
-`js/admin/base.js` and `js/data/data.js` files. Change them as necessary.
+`js/admin/base.js`, `meta-data.js` and `js/data/data.js` files. Change them as necessary. Detail information about them are explained in the file itself.
 
-Build process
-=============
+Compiling bioinformatic data
+----------------------------
 
-For day-to-day job, building is simply typing `ant build` on this folder.
+Precompiled data for Gene ontology, Protein information, UniGene, etc are required. They are compiled in `mbinfo-app-script` module.
+
+Debug process
+-------------
+
+See available tasks by `ant -p`. Mostly we want to build the main app `ant comp-ex-app`.
+
+For day-to-day job, building is simply typing `ant build push` on this folder. This will upload edge version. If satisfy with it, progress stage to to dev and RC tracks.
 
 
 Build process
