@@ -66,7 +66,7 @@ mbi.app.base.VERSION_STABLE = '1.5.9';
  * @const
  * @type {string}
  */
-mbi.app.base.VERSION_BETA = '1.5.9';
+mbi.app.base.VERSION_BETA = '1.5.12';
 
 
 /**

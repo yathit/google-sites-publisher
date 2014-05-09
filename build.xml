@@ -13,7 +13,7 @@
     <property name="html-debug.bk" value="mbinfo" description="bucket name for static web site for debugging"/>
     <property name="mbi-app-ver-major" value="1"/>
     <property name="mbi-app-ver-minor" value="5"/>
-    <property name="mbi-app-ver-patch" value="10"/>
+    <property name="mbi-app-ver-patch" value="12"/>
     <property name="mbi-app-ver" value="${mbi-app-ver-major}.${mbi-app-ver-minor}.${mbi-app-ver-patch}"/>
     <property name="out.fn" value="mbi-app-${mbi-app-ver}.js"/>
     <property name="data.fn" value="data-${site-name}${data-version}.js"/>
@@ -245,7 +245,7 @@
         </sequential>
     </macrodef>
 
-    <target name="webapp-debug" description="compile JS">
+    <target name="webapp" description="compile JS for web app">
         <mkdir dir="${mbi-app.dir}/jsc"/>
 
         <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
@@ -304,7 +304,7 @@
                  value="https://raw.github.com/mbikt/mbinfo-app-script/master/"/>
     </target>
 
-    <target name="inj-raw" description="generates simple compile file">
+    <target name="inj-raw" description="compile JS for content script (raw mode)">
         <!--SIMPLE_OPTIMIZATIONS-->
         <closure-compile compilationlevel="SIMPLE_OPTIMIZATIONS"
                          base.dir="."
@@ -344,7 +344,7 @@
         </closure-compile>
     </target>
 
-    <target name="comp-debug" description="compile JS">
+    <target name="comp-ex-app" description="compile JS">
         <mkdir dir="${mbi-app.dir}/jsc"/>
 
         <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
@@ -413,7 +413,7 @@
                  value="http://localhost/mbi-app/"/>
     </target>
 
-    <target name="inj-debug" description="compile JS">
+    <target name="inj-debug" description="compile JS for content script (debug mode)">
         <mkdir dir="${mbi-app.dir}/jsc"/>
 
         <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
@@ -474,7 +474,7 @@
                  value="http://localhost/mbi-app/"/>
     </target>
 
-    <target name="bootstrip" description="compile JS">
+    <target name="bootstrip" description="compile bootstrip JS for chrome extension app">
         <mkdir dir="${mbi-app.dir}/jsc"/>
 
         <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
@@ -503,7 +503,7 @@
             </options>
         </closure-compile>
     </target>
-    <target name="bootstrip-web" description="compile JS">
+    <target name="bootstrip-web" description="compile bootstrip JS for web">
         <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
                          input="${mbi-app.dir}/js/web/bootstrip.js"
                          input.dir="${mbi-app.dir}/js"
@@ -731,7 +731,7 @@
 
       -->
     </target>
-    <target name="crx" description="prepare crx folder">
+    <target name="crx" description="prepare chrome extension app package">
         <sequential>
             <replaceregexp file="${publish.dir}/extension/manifest.json"
                            match='"version": ".+"'
@@ -757,7 +757,7 @@
             depends="push-js,push-css,push-bootstrip">
 
     </target>
-    <target name="templ" description="compile templates">
+    <target name="templ" description="compile soy templates">
 
 
         <fileset dir="${mbi-app.dir}/templ" id="templ.files">
@@ -802,7 +802,7 @@
                      value="https://ssl.gstatic.com/"/>
         </sequential>
     </target>
-    <target name="css-featured" description="concat css for desktop">
+    <target name="css-featured" description="concat css for featured theme">
         <concat destfile="${css.dir}/mbi-app-${mbi-app-ver}-featured.css" >
             <fileset dir="${work.dir}/mbinfo-app-script/css/"
                      includes="interaction.css,linkout.css,domain.css,protein-card.css,pubmed.css"/>
@@ -810,7 +810,7 @@
                      includes="base.css,breadcrumb.css,figure.css,fonts.css,goog.css,img-orb-nav.css,wiki.css,theme/featured.css" />
         </concat>
     </target>
-    <target name="css-simplicity" description="concat css for simplicity">
+    <target name="css-simplicity" description="concat css for simplicity theme">
         <concat destfile="${css.dir}/mbi-app-${mbi-app-ver}-simplicity.css" >
             <fileset dir="${work.dir}/mbinfo-app-script/css/"
                      includes="interaction.css,linkout.css,domain.css,protein-card.css,pubmed.css"/>
@@ -831,29 +831,8 @@
                 />
     </target>
 
-    <target name="concat-csv"
-            description="concat csv files from Downloads folder">
-        <concat destfile="${data.dir}/protein-domains.csv" >
-            <fileset dir="~/Downloads"
-                     includes="*.csv"/>
-        </concat>
-    </target>
-
-
-    <target name="app-dev-html"
-            description="Generate HTML from soy template">
-        <gen-soy-web output.fn="${mbi-app.dir}/app-dev.html"
-                     namespace="templ.mbi.app.adminapp.index"
-                     soy-map-data="is_raw=true,is_app=true,version=${mbi-app-ver}"
-                     templ.dir="${templ.dir}">
-            <soy-web-optionls>
-                <arg value="--force=true"/>
-                <arg value="--notidy=true"/>
-            </soy-web-optionls>
-        </gen-soy-web>
-    </target>
     <target name="app-html"
-            description="Generate HTML from soy template">
+            description="Generate HTML for chrome extension app">
         <mkdir dir="${publish.dir}"/>
         <gen-soy-web output.fn="${publish.dir}/extension/app.html"
                      namespace="templ.mbi.app.adminapp.index"
@@ -866,7 +845,7 @@
         </gen-soy-web>
     </target>
     <target name="cgi"
-            description="Generate HTML from soy template">
+            description="Generate default (404) HTML file">
         <gen-soy-web output.fn="${mbi-app.dir}/cgi.html"
                      namespace="templ.mbi.web.html.index"
                      soy-map-data="htmlFile=index,version=${mbi-app-ver},assess_domain=${asset.domain-unquote}"
@@ -882,25 +861,8 @@
         </echo>
     </target>
 
-    <target name="cgi-dev"
-            description="Generate HTML from soy template">
-
-        <gen-soy-web output.fn="${mbi-app.dir}/cgi.html"
-                     namespace="templ.mbi.web.html.index"
-                     soy-map-data="is_raw=true,htmlFile=index,version=${mbi-app-ver}"
-                     templ.dir="${templ.dir}">
-            <soy-web-optionls>
-                <arg value="--force=true"/>
-                <arg value="--notidy=true"/>
-            </soy-web-optionls>
-        </gen-soy-web>
-        <echo>
-            gsutil cp ./cgi.html gs://mbinfo-wiki-3/cgi
-        </echo>
-    </target>
-
-    <target name="build" description="build all distribution"
-            depends="css,templ,app-html,app-html,cgi,comp-debug,webapp-debug,inj-debug,bootstrip,bootstrip-web,crx">
+    <target name="build" description="build all js, css, HTML"
+            depends="css,templ,app-html,app-html,cgi,comp-ex-app,webapp,inj-debug,bootstrip,bootstrip-web,crx">
 
     </target>
 </project>
