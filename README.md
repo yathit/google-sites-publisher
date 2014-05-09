@@ -78,13 +78,6 @@ AWS CloudFront setup
 Optionally, to improve static content load performance, a CDN may setup. We are using
 AWS CloudFront for HTML, CSS, FONT contents.
 
-Developer machine setup
------------------------
-
-For developer testing, running local static server is necessary. It is assume root
-directory is running in `htt://localhost:8085`. We use port number here, just to make
-host origin name is a bit different from usual `htt://localhost`.
-
 
 Security
 --------
