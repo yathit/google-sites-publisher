@@ -1,0 +1,104 @@
+
+.imgnav-base {
+    margin: 2px 8px;
+    padding: 4px;
+    overflow: hidden;
+    height: 140px;
+    width: 180px;
+    background-color: #F6F6F6;
+    opacity: 1;
+    border-radius: 25px;
+}
+
+
+.imgnav-base-active {
+    /* width: 58em; */ /* 13 * 4 + 6 */
+    box-shadow: 2px 2px 1px #888888;
+}
+
+.imgnav-base div.imgnav-cell  {
+    display: inline-block;
+    width: 187px;
+    vertical-align: top;
+}
+
+.imgnav-base div.first, .orb-base div.first {
+    cursor: pointer;
+    text-align: center;
+}
+
+
+div.imgnav-cell img {
+    /* expend to div */
+    width: 142px;
+    height: 142px;
+    display: block;
+    margin: 0 auto;
+}
+
+div.imgnav-cell ul, div.orb-cell ul {
+    padding: 0;
+    margin: 0;
+}
+
+div.imgnav-cell ul li, div.orb-cell ul li {
+    padding: 0 4px;
+    list-style: none;
+    display: block;
+}
+
+div.imgnav-cell h3, div.orb-cell h3 {
+    padding: 6px 0 2px 0;
+    margin: 0;
+    font-size: 100%;
+}
+
+div.imgnav-cell ul li a, div.orb-cell ul li a {
+    text-decoration: none;
+    color: #0A8ECC;
+    padding: 2px 0px;
+}
+
+
+.orb-base {
+    font-size: 90%;
+    margin: 2px 8px;
+    padding: 4px;
+    overflow: hidden;
+    height: 200px;
+    background-color: #F6F6F6;
+    opacity: 1;
+    border-radius: 25px;
+}
+
+
+.orb-base div.orb-cell  {
+    display: inline-block;
+    width: 160px;
+    vertical-align: top;
+}
+
+.orb-base div.orb-cell.first  {
+    width: 178px;
+}
+
+
+div.orb-cell .bg-image {
+    /* expend to div */
+    width: 187px;
+    height: 201px;
+    display: block;
+    margin: 0 auto;
+    background-image: url(//www.mechanobio.info/image/img-nav/sprite.png);
+    background-position:0px 0px;
+}
+
+.orb-base.selected {
+    width: 818px; /* 178 + 160 * 4 */
+}
+
+.orb-base:hover .bg-image {
+    background-position:0px -201px;
+}
+
+

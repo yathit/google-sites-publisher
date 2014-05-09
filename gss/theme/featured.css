@@ -1,0 +1,83 @@
+/**
+ * Full featured theme
+ * This is default theme
+ */
+
+body.featured {
+    background-color: #d3d3d3;
+}
+
+body.featured section.content {
+
+}
+
+body.featured .sidebar-bottom {
+    font-size: 90%;
+}
+
+body.featured #rightbar {
+    width: 264px;
+    position: absolute;
+    right: 0;
+    display: block;
+}
+
+body.featured #rightbar.empty {
+    display: none;
+}
+
+
+body.featured #wiki-content {
+    margin-right: 280px;
+    overflow-x: hidden;
+    padding-left: 4px;
+}
+
+body.featured #wiki-content.rightbar-empty {
+    margin-right: 8px;
+}
+
+body.featured.rightbar-empty #wiki-content {
+    margin-right: 8px;
+}
+
+body.featured footer {
+    margin-right: 264px;
+}
+
+body.featured.rightbar-empty footer {
+    margin-right: 8px;
+}
+
+body.featured .history {
+    margin-right: 264px;
+}
+
+body.featured.rightbar-empty .history {
+    margin-right: 8px;
+}
+
+
+body.featured #breadcrumb-peer {
+    display: none;
+}
+
+body.featured #topic-definition-panel {
+    margin: 4px 16px 16px 0;
+    padding: 4px 0;
+    border-radius: 5px;
+    font-size: 95%;
+    text-align: justify;
+
+}
+
+body.featured #topic-definition-panel h3 {
+    margin: 4px 0;
+    padding: 0;
+}
+
+body.featured #topic-definition-panel p {
+    margin: 0;
+    padding: 0;
+    font-style: italic;
+}

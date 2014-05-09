@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../../gss/base.css">
+    <link rel="stylesheet" type="text/css" href="../../gss/theme/featured.css">
+    <title>Image Nav UI Test</title>
+    <script type="text/javascript" src="../../../closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript" src="../../../ydn-base/src/deps.js"></script>
+    <script type="text/javascript" src="../../../ydn/src/deps.js"></script>
+    <script type="text/javascript" src="../deps.js"></script>
+    <script type="text/javascript">
+        goog.require("mbi.ui.ImageNav");
+    </script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="adminapp">
+
+    <section class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo">
+                <img src="https://mbinfo.storage.googleapis.com/image/mbinfo-logo.png"
+                     alt="MBInfo logo"/>
+            </div>
+            <div id="image-nav">
+            </div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+  var ele = document.getElementById('image-nav');
+  var img_nav = new mbi.ui.ImageNav();
+  img_nav.init(ele);
+</script>
+</body>
+</html>

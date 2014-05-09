@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+-->
+<head>
+    <title>ScrollFloater</title>
+    <script type="text/javascript" src="http://localhost/closure-library/closure/goog/base.js"></script>
+
+    <script>
+        goog.require('goog.dom');
+        goog.require('goog.events');
+        goog.require('goog.ui.ScrollFloater');
+
+    </script>
+
+    <style>
+        #d1 {
+            position: fixed;
+            background: lightcoral;
+        }
+        .hd {
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+ <div>
+     <div id="d1"  class="hd">
+         Non flaoter
+     </div>
+     <div id="floater1" >
+         Floater
+
+     </div>
+     <div id="d2" class="hd">
+         follower
+     </div>
+     <div id="d3" class="hd">
+         follower
+     </div>
+ </div>
+
+<script>
+
+    var scrollfloater1 = new goog.ui.ScrollFloater();
+    scrollfloater1.setViewportTopOffset(50);
+    scrollfloater1.setContainerElement(goog.dom.getElement('floater1').parentElement);
+    scrollfloater1.decorate(goog.dom.getElement('floater1'));
+
+</script>
+</body>
+</html>

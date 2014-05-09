@@ -1,0 +1,411 @@
+{namespace templ.mbi.web.html}
+
+/*
+ * Template for static site.
+ */
+
+
+/**
+* @param canonical_url url
+* @param is_raw raw or not
+* @param assess_domain assess server domain
+*/
+{template .jsHead}
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+{if $canonical_url}
+  <link rel="canonical" href="{$canonical_url}"/>
+{/if}
+    {if $is_raw}
+      <script type="text/javascript" src="https://mbinfo.storage.googleapis.com/jsc/raphael-min-2.1.0.js"></script>
+      <script type="text/javascript" src="http://localhost/mbi-app/meta-data.js"></script>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/fonts.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/img-orb-nav.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/base.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/wiki.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/goog.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/figure.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/breadcrumb.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/we-are-hiring.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/base.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/domain.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/interaction.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/linkout.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/protein-card.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/pubmed.css"/>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/theme/simplicity.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/theme/featured.css">
+      <script type="text/javascript" src="http://localhost/closure-library/closure/goog/base.js"></script>
+      <script type="text/javascript" src="http://localhost:8085/ydn-base/src/deps.js"></script>
+      <script type="text/javascript" src="http://localhost:8085/ydn/src/deps.js"></script>
+      <script type="text/javascript" src="http://localhost:8085/ydn-db/src/deps.js"></script>
+      <script type="text/javascript" src="http://localhost:8085/ydn-db-sync/src/deps.js"></script>
+      <script type="text/javascript" src="http://localhost:8085/gdata/src/deps.js"></script>
+      <script type="text/javascript" src="http://localhost/mbinfo-app-script/js/deps.js"></script>
+      <script type="text/javascript" src="http://localhost/mbinfo-wiki/js/deps.js"></script>
+      <script type="text/javascript" src="http://localhost/mbi-app/js/deps.js"></script>
+      <script type="text/javascript" src="http://localhost/mbi-app/js/web/include.js"></script>
+    {else}
+      <link rel="stylesheet" type="text/css" href="//www.mechanobio.info/css/common.css">
+      <script type="text/javascript" src="//{$assess_domain}/jsc/web-bootstrip.js"></script>
+    {/if}
+{/template}
+
+
+/**
+* @param is_raw raw or not
+*/
+{template .jsBody}
+    {if $is_raw}
+        <script type="text/javascript" src="http://localhost/mbi-app/js/web/bootstrip-dev.js"></script>
+    {/if}
+{/template}
+
+
+/**
+* Head and body of HTML.
+* @param title title.
+*/
+{template .innerHtml}
+<head>
+    <meta charset="utf-8"/>
+    <title>{if $title}{$title} - {/if}MBInfo Wiki</title>
+    {call .jsHead data="all"/}
+</head>
+<body>
+  {call .body data="all"/}
+  {call .jsBody data="all"/}
+</body>
+{/template}
+
+/**
+* Home page
+* @param is_raw raw or not
+*/
+{template .index}
+
+<!DOCTYPE html>
+<html>
+   {call .innerHtml data="all"/}
+</html>
+
+{/template}
+
+
+/**
+ * Body HTML.
+ * @param breadcrumbPeer breadcrumb peer menu content.
+ */
+{template .sidebar}
+<section class="sidebar">
+  <div class="sidebar-top">
+    <div class="logo" style="display: none">
+      <a href="/">
+      </a>
+    </div>
+    <div id="image-nav">
+    </div>
+  </div>
+  <div class="sidebar-bottom">
+     <div class="sidebar-bottom-scroller">
+        <div role="navigation" id="breadcrumb-peer" class="menu-box">
+        {if $breadcrumbPeer}
+          {print $breadcrumbPeer |noAutoescape}
+        {else}
+          <ul class="breadcrumb-sidemenu">
+            <li><a href="/topics/cytoskeleton-dynamics">Cytoskeleton Dynamics</a></li>
+            <li><a href="/topics/synthesis">Synthesis</a></li>
+            <li><a href="/topics/signaling">Signaling</a></li>
+            <li><a href="/topics/modules">Modules</a></li>
+            <li><a href="/topics/cellular-organization">Cellular Organization</a></li>
+          </ul>
+        {/if}
+        </div>
+        {call templ.mbi.app.topicDefinitionPanel/}
+        <div id="toolbar">
+        </div>
+
+    </div>
+  </div>
+</section>
+{/template}
+
+
+/**
+ * Body HTML.
+ * @param content wiki content.
+ * @param breadcrumb breadcrumb content.
+ * @param breadcrumbPeer breadcrumb peer menu content.
+ * @param date date value.
+ */
+{template .body}
+<div id="body-content"><div>
+  <div id="banner">
+           <div class="left">
+                      <a href="http://www.mechanobio.info/" id="home-link">
+
+                     </a>
+                 </div>
+         <div class="right">
+            <div class="top">
+              <div class="login-bar">
+                     <div>
+                       <span id="user-name" style="display: none;"></span>
+                     </div>
+                     <div>
+                       <a id="user-login">...</a>
+                     </div>
+                   </div>
+             </div>
+             <div class="bottom">
+               <input type="text" placeholder="Search MBInfo" width="8em" id="search-input"/>
+             </div>
+         </div>
+  </div>
+  {call .sidebar data="all" /}
+<div id="main-panel">
+   <div id="main-panel-topbar">
+      <div id="breadcrumb">
+        {if $breadcrumb}
+          {print $breadcrumb |noAutoescape}
+        {/if}
+      </div>
+   </div>
+   <div id="main-panel-content">
+      <section class="content" id="section-content">
+        <div id="content-main">
+          {call templ.mbi.app.rightbar data="all"/}
+          <div id="wiki-content" class="wiki-content">
+            {if $content}
+              {call templ.mbi.app.content data="all"/}
+            {/if}
+          </div>
+        </div>
+        {if $date}
+          <div class="history">
+            <div>
+              <div class="left">Updated on: {$date}</div>
+              <div class="center"></div>
+              <div class="right"><a href="#" class="show-history">History</a></div>
+            </div>
+          </div>
+        {/if}
+      </section>
+  </div>
+</div>
+{call .footer data="all" /}
+</div></div>
+{/template}
+
+/**
+* Index page
+* @param show_license show license
+*/
+{template .footer}
+<footer>
+   {if $show_license}
+     <div class="license">
+       <span class="cc-by-nc"></span> <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">MBInfo</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.mechanobio.info" property="cc:attributionName" rel="cc:attributionURL">MBI</a>,
+          {sp}<a href="http://www.nus.edu.sg">NUS</a> is licensed under a
+       {sp}<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative&nbsp;Commons Attribution-NonCommercial&nbsp;4.0 International&nbsp;License</a>; additional terms may apply.
+     </div>
+   {/if}
+   <div>
+     <div id="all-logos">
+        <img usemap="imgmap201436163455" src="//www.mechanobio.info/image/home/all-logo.png"/>
+     </div>
+     <map id="imgmap201436163455" name="imgmap201436163455">
+      <area shape="rect" alt="MBInfo" title="" coords="1,1,118,35" href="//www.mechanobio.info" target="" /><area shape="rect" alt="NUS" title="" coords="126,3,202,38" href="http://www.nus.edu.sg" target="" /><area shape="rect" alt="MOE" title="" coords="210,4,358,39" href="http://www.moe.edu.sg/" target="" /><area shape="rect" alt="NRF" title="" coords="365,5,440,39" href="http://www.nrf.gov.sg/" target="" />
+      </map>
+   </div>
+   <div class="menu-block">
+       <ul class="menu">
+           <li><a href="http://mbi.nus.edu.sg/opportunities/">Jobs</a></li>
+           <li><a href="http://www.mechanobio.info/about.html">About us</a></li>
+           <li><a href="/terms-of-use.html"><span>Terms of Use</span></a></li>
+           <li><a href="/privacy.html"><span>Privacy</span></a></li>
+       </ul>
+   </div>
+</footer>
+{/template}
+
+
+/**
+* Index page
+*/
+{template .home}
+<article>
+ The goal of mechanobiology is to understand the functional effects of
+ the structural micro-environment and force-induced deformations. These factors, when combined with chemical signals, determine the local cell response that is integrated to drive multicellular functions in whole organisms.
+</article>
+{/template}
+
+
+/**
+* Index page
+* @param url page url
+*/
+{template .error}
+<article>
+  <p>
+    The URL {$url} you are looking for cannot be found on server.
+  </p>
+  <p id="error-similar-page">
+  </p>
+</article>
+{/template}
+
+
+/**
+* Index page
+* @param url var
+* @param items version object.
+*/
+{template .history}
+<div class="history-detail">
+  <table width="98%">
+    <thead>
+      <tr>
+        <th>Version</th>
+        <th>Last Published</th>
+        <th>Published by</th>
+        <th>Size and changes</th>
+      </tr>
+    </thead>
+    <tbody>
+    {foreach $obj in $items}
+      <tr>
+         <td><a target="_blank" href="{$url}?generation={$obj['Generation']}">Version {$obj['No']}</a></td>
+         <td>{$obj['LastModified']}</td>
+         <td>{$obj['Owner']['DisplayName']}</td>
+         <td>{$obj['Size']} bytes {$obj['Change']}</td>
+      </tr>
+    {/foreach}
+    </tbody>
+  </table>
+</div>
+{/template}
+
+
+/**
+* Figure page
+* @param title figure title.
+*/
+{template .figure}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>MBInfo Figure Page {if $title} - {$title}{/if} </title>
+    {call .jsHead data="all"/}
+</head>
+<body>
+<div id="body-content"><div>
+    <div id="banner">
+           <div class="left">
+                      <a href="//www.mechanobio.info/" id="home-link">
+
+                     </a>
+                 </div>
+         <div class="right">
+            <div class="top">
+              <div class="login-bar">
+                     <div>
+                       <span id="user-name" style="display: none;"></span>
+                     </div>
+                     <div>
+                       <a id="user-login">...</a>
+                     </div>
+                   </div>
+             </div>
+             <div class="bottom">
+               <input type="text" placeholder="Search MBInfo" width="8em" id="search-input"/>
+             </div>
+         </div>
+   </div>
+  {call .sidebar data="all" /}
+   <section class="content" id="section-content">
+    <div id="main-panel">
+
+      <div id="main-panel-topbar">
+          <div id="breadcrumb">
+
+          </div>
+       </div>
+       <div id="main-panel-content">
+
+        <section class="figure" id="section-figure">
+          <div class="copyrighted-figure">
+            {call templ.mbi.fig.figure data="all"/}
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+  {call .jsBody data="all"/}
+</div></div>
+</body>
+</html>
+{/template}
+
+
+
+/**
+* Figure page
+* @param rows table rows.
+*/
+{template .figureList}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>MBInfo - List of figures </title>
+    {call .jsHead data="all"/}
+</head>
+<body>
+<div id="body-content"><div>
+   <div id="banner">
+          <div class="left">
+                     <a href="//www.mechanobio.info/" id="home-link">
+
+                    </a>
+                </div>
+        <div class="right">
+           <div class="top">
+             <div class="login-bar">
+                    <div>
+                      <span id="user-name" style="display: none;"></span>
+                    </div>
+                    <div>
+                      <a id="user-login">...</a>
+                    </div>
+                  </div>
+            </div>
+            <div class="bottom">
+              <input type="text" placeholder="Search MBInfo" width="8em" id="search-input"/>
+            </div>
+        </div>
+  </div>
+  {call .sidebar data="all" /}
+  <section class="content" id="section-content">
+    <div id="main-panel">
+      <section class="topbar">
+        <div id="breadcrumb">
+
+        </div>
+      </section>
+      <section class="figure-list" id="section-figure-list">
+
+          <h3>List of figures</h3>
+          <div class="figure-table">
+            {call templ.mbi.fig.figureListTable data="all"/}
+          </div>
+      </section>
+    </div>
+  </section>
+  {call .footer data="all" /}
+</div></div>
+{call .jsBody data="all"/}
+</body>
+</html>
+{/template}

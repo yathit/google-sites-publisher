@@ -1,0 +1,156 @@
+.wiki-content {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.wiki-content h1, .wiki-content h2, .wiki-content h3, .wiki-content h4, .wiki-content h5 {
+    font-family:  times, serif;
+}
+
+.wiki-content h2 {
+    font-variant: small-caps;
+    color: #163c77;
+}
+
+
+.wiki-content A {
+    text-decoration: none;
+    color: #0A8ECC;
+}
+
+
+.wiki-content A:HOVER {
+    color: #0A8ECC
+}
+
+
+.wiki-content A.citation {
+    text-decoration: none;
+    color: inherit;
+}
+
+.wiki-content A.citation:hover {
+    text-decoration: underline;
+    color: #0A8ECC;
+}
+
+
+.wiki-editsection {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: small;
+    font-weight: normal;
+    margin-left: 1em;
+    vertical-align: baseline;
+    line-height: 1em;
+    display: inline-block;
+    float: right;
+    font-variant: normal;
+}
+
+.menu-box {
+    margin: 4px 0;
+    padding: 4px 0;
+}
+
+#protein-infobox {
+   margin-top: 4px;
+
+}
+
+.toolbar label {
+    width: 25%;
+    display: inline-block;
+}
+
+/** annotation metadata content */
+.content .annotation {
+    cursor: pointer; /* give visual clue to click the element */
+    border-bottom: 1px dashed #000;
+    text-decoration: none;
+}
+
+.annotation.uniprot {
+    border-bottom: 1px dashed darkgreen;
+}
+
+.annotation.family {
+
+}
+
+
+.annotation.go {
+    border-bottom: 1px dashed orangered;
+}
+
+.subpage {
+
+}
+
+#relevant-panel {
+    margin-top: 8px;
+}
+
+.relevant-pages-panel {
+    font-size: 95%;
+    margin-bottom: 16px;
+}
+
+.subpage-panel {
+    border: thin solid #1D243d;
+    padding: 8px;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.subpage-panel h3 {
+    padding: 0;
+    margin: 0;
+}
+
+
+.subpage-panel ul {
+    margin: 4px 0;
+}
+
+
+.relevant-pages-panel ul {
+    list-style: none;
+    padding-left: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 4px 0;
+}
+
+.infobox h2 a {
+    /* update link in infobox header */
+    color: white;
+    font-size: 70%;
+    vertical-align: top;
+    padding-left: 2px;
+    font-style: normal;
+    font-weight: 100;
+    display: none;
+}
+
+.adminapp .infobox h2 a {
+    /* update link in infobox header */
+    display: inline !important;
+}
+
+
+#rightbar {
+    display: none;
+}
+
+.subsections-title {
+    font-style: italic;
+    font-size: 110%;
+}
+
+.subpage > h3 > a {
+    color: black;
+}
+
+input.protein-ac {
+    width: 95%;
+}

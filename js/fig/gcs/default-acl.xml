@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<AccessControlList>
+<Entries>
+    <Entry>
+        <Scope type="AllUsers"/>
+        <Permission>
+            READ
+        </Permission>
+    </Entry>
+
+    <Entry>
+        <Scope type="UserByEmail">
+            <EmailAddress>
+                mbinfo-backend@appspot.gserviceaccount.com
+            </EmailAddress>
+        </Scope>
+        <Permission>
+            FULL_CONTROL
+        </Permission>
+    </Entry>
+    <Entry>
+        <!-- Let all authenticated user to write objects. -->
+        <Permission>FULL_CONTROL</Permission>
+        <Scope type="GroupByEmail">
+            <EmailAddress>
+                reviewer@mechanobio.info
+            </EmailAddress>
+        </Scope>
+    </Entry>
+</Entries>
+</AccessControlList>

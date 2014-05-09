@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../../gss/base.css">
+    <link rel="stylesheet" type="text/css" href="../../gss/wiki.css">
+    <link rel="stylesheet" type="text/css" href="../../../mbinfo-app-script/css/protein-card.css">
+    <title>Function infobox Test</title>
+    <script type="text/javascript" src="../../../closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript" src="../../../ydn-base/src/deps.js"></script>
+    <script type="text/javascript" src="../../../ydn/src/deps.js"></script>
+    <script type="text/javascript" src="../../../gdata/src/deps.js"></script>
+    <script type="text/javascript" src="../../../ydn-db/src/deps.js"></script>
+    <script type="text/javascript" src="../../../ydn-db-sync/src/deps.js"></script>
+    <script type="text/javascript" src="../../../mbinfo-app-script/js/deps.js"></script>
+    <script type="text/javascript" src="../deps.js"></script>
+    <script type="text/javascript">
+        goog.require('mbi.app.AdminApp');
+    </script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="adminapp">
+    <div id="relevant-panel"></div>
+
+</div>
+<script type="text/javascript">
+  var data = [null,[null,"name","title","go-0005882","go-0005874","go-0072583","go-0005884","go-0032059","go-0032060","go-0043292","go-0030175","go-0046847","invadopodia","Invadopodium-Assembly",null,null,"go-0002102","go-0071800","go-0001725","go-0043149","go-0051492","go-0007267","go-0005912","go-0034333","go-0022407"],[null,null,null,"Intermediate Filament","Microtubule ","Clathrin-mediated endocytosis","Actin Filament ","Bleb","Bleb Assembly","Contractile Fiber","Filopodium","Filopodium Assembly","Invadopodium","Invadopodium Assembly","Lamellipodium","Lamellipodium Assembly","Podosome","Podosome Assembly","Stress Fiber","Stress Fiber Assembly","Regulation of Stress Fiber Assembly","Cell-Cell Signaling","Adherens Junction","Adherens Junction Assembly","Regulation of Cell-Cell Adhesion","Cell-Matrix Adhesion","Focal Adhesion","Focal Adhesion Assembly","Regulation of Focal Adhesion Assembly","Canonical Wnt Receptor Signaling Pathway"],null,[null,"go-0003779","Actin Binding",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0051693","Actin Filament Capping",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0030042","Actin Filament Depolymerization",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0045010","Actin Nucleation",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0051017","Actin Filament Bundle Assembly",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0030041","Actin Filament Polymerization",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0070649","Formin-nucleated Actin Cable Assembly",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0000146","Microfilament motor activity",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0003774","Motor Activity",null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],null,[null,"1_go-0031109","Microtubule Polymerization or Depolymerization",null,"Y","Y",null,null,null,null,null,null,"Y","Y"],[null,"go-0031110","Regualtion of Microtubule Polymerization or Depolymerization ",null,"Y","Y",null,null,null,null,null,null,"Y","Y"],[null,"go-0007021","Tubulin Complex Assembly",null,"Y","Y",null,null,null,null,null,null,"Y","Y"],null,[null,"go-0007155","Cell-Adhesion",null,null,null,"Y","Y",null,null,"Y","Y",null,null,"Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],[null,"go-0007411","Axon Guidance",null,null,null,"Y",null,null,null,"Y","Y",null,null,"Y","Y"],[null,"go-0004687","Myosin-light chain kinase activity",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Y","Y","Y"],[null,"go-0022617","Extra-cellular Matrix Disassembly",null,null,null,null,null,null,null,null,null,"Y","Y",null,null,"Y","Y"],[null,"go-0007229","Integrin Mediated Signaling Pathway",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Y","Y","Y",null,null,null,null,"Y","Y","Y","Y"],[null,"go-0033622","Integrin Activation",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Y","Y","Y",null,null,null,null,"Y","Y","Y","Y"],[null,"go-0030705","Cytoskeleton-dependent Intracellular Transport",null,"Y",null,"Y",null,null,null,"Y","Y",null,null,"Y","Y"]];
+
+  var ele = document.getElementById('relevant-panel');
+  var infobox = new mbi.ui.FunctionInfoBox(true);
+  infobox.render(ele);
+  console.log(infobox.convertMatrix2Records(data));
+</script>
+</body>
+</html>

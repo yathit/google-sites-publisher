@@ -1,0 +1,242 @@
+{namespace templ.mbi.app}
+
+/**
+ * User setting
+ * @param editable editable table.
+ */
+{template .tools}
+  <div class="tools">
+    <ul>
+      <li>{call .termDefinitionPanel/}</li>
+      {if $editable}
+        <li><a href="#upload" name="upload">Upload image</a></li>
+        <li><a href="#figure-list" name="list-figure">Figure list</a></li>
+        <li><a href="https://github.com/mbikt/mbinfo-extension/issues/new">Report bug</a></li>
+      {else}
+        <li><a href="/figure-list.html" name="list-figure">Figure list</a></li>
+        <li><a href="/feedback.html">Feedback</a></li>
+        <li><a href="/Help">Help</a></li>
+      {/if}
+      <li><a href="/cgi?sitemap" id="btn-sitemap">Sitemap</a></li>
+      <li><a href="#setting" id="btn-tools-setting">Setting</a></li>
+
+    </ul>
+  </div>
+{/template}
+
+/**
+ * User setting
+ * @param admin_app show full setting for chrome extension.
+ */
+{template .setting}
+  <h3>Setting</h3>
+  <div class="setting" name="track">
+   <label>Track</label>
+   <select class="track">
+     <option value="previous">
+       Previous
+     </option>
+     <option value="stable">
+       Stable
+     </option>
+     <option value="beta">
+       Beta
+     </option>
+     <option value="edge">
+       Edge
+     </option>
+   </select>
+  </div>
+  <div class="setting" name="theme">
+   <label>Theme</label>
+   <select class="theme">
+     <option value="featured">
+       Featured
+     </option>
+     <option value="simplicity">
+       Simplicity
+     </option>
+   </select>
+  </div>
+  <div class="setting">
+    <label>Log</label>
+    <input type="checkbox" id="setting-logging"/>
+  </div>
+
+
+  <div class="setting">
+    <details><summary>Advanced setting</summary>
+      {if $admin_app}
+        <div>
+          <a class="logout">logout</a>
+        </div>
+        <div>
+          <a class="revoke">Revoke access</a>{sp}
+          <a href="https://security.google.com/settings/security/permissions" >Manage credentials</a>
+        </div>
+      {/if}
+      <div>
+        <button type="button" title="Clear database cache." class="clear-cache">Clear cache</button>
+        <span> Require refresh.</span>
+      </div>
+    </details>
+  </div>
+  <br />
+  <div>
+    Version: <span class="version"></span>
+  </div>
+{/template}
+
+
+/**
+ * User setting
+ */
+{template .rightbar}
+    <div id="rightbar">
+      <div style="position: relative">
+        <div id="relevant-panel">
+        </div>
+
+        <div id="protein-infobox">
+        </div>
+      </div>
+    </div>
+{/template}
+
+
+/**
+* Index page
+* @param name page name
+* @param title page title.
+* @param edit_url edit url for the content.
+* @param content html article content.
+* @param sub_pages sub pages.
+* @param reference reference list content.
+*/
+{template .content}
+<article name="{$name}">
+  <h2><span>{$title}</span>
+    {if $edit_url}
+      <span class="wiki-editsection">[<a rel="nofollow" target="{$edit_url}" href="{$edit_url}">Edit</a>]</span>
+    {/if}
+  </h2>
+  <div id="subpages-panel">
+  </div>
+  {if $sub_pages.length > 1}
+    <div id="subsections-panel">
+      <div class="subsections-title">Content</div>
+      <ol>
+        {foreach $sub in $sub_pages}
+          <li>
+            <a href="#{$sub.name}">{$sub.title}</a>
+          </li>
+        {/foreach}
+      </ol>
+    </div>
+  {/if}
+  {print $content |noAutoescape}
+  {foreach $sub in $sub_pages}
+    <div class="subpage">
+      <h3><a href="{$sub.path}" name="{$sub.name}">{$sub.title}</a>
+      <span class="wiki-editsection">
+        [<a rel="nofollow" href="{$sub.edit_url}" target="{$sub.edit_url}">Edit</a>]
+      </span>
+      </h3>
+      {print $sub.content |noAutoescape}
+    </div>
+  {/foreach}
+  {if $reference}
+    {print $reference |noAutoescape}
+  {/if}
+</article>
+{/template}
+
+
+/**
+ * User setting
+ * @param rows editable table.
+ */
+{template .recentContent}
+  <div class="recent-content">
+    <ul>
+      {foreach $row in $rows}
+        <li>
+          <div>
+            <img src="{$row.imgUrl}"/>
+            <a href="{$row.url}">{$row.title}</a>
+          </div>
+        </li>
+      {/foreach}
+    </ul>
+  </div>
+{/template}
+
+
+/**
+ * User setting
+ * @param rows list of url
+ */
+{template .subpagesPanel}
+  <div class="subpage-panel" >
+     <h3>In this topic</h3>
+     <ul>
+      {foreach $row in $rows}
+        <li>
+            <a href="{$row.url}">{$row.title}</a>
+        </li>
+      {/foreach}
+    </ul>
+  </div>
+{/template}
+
+
+/**
+ * Topic definition
+ */
+{template .topicDefinitionPanel}
+<div id="topic-definition-panel" style="display: none">
+  <div>
+    <h3></h3>
+    <p></p>
+  </div>
+</div>
+{/template}
+
+
+/**
+ * Term definition panel.
+ */
+{template .termDefinitionPanel}
+<div id="term-definition-panel" style="display: none">
+  <div>
+    <input name="name" title="Enter term for definition" placeholder="actin" list="definition-search-hint"/>
+    <a href="#" style="display: none" name="show-update">...</a>
+    <div class="definition">
+    </div>
+    <datalist id="definition-search-hint">
+
+    </datalist>
+  </div>
+
+   <div name="admin" class="admin-tool">
+     <div name="upload-panel"  style="display: none">
+       Count: <span title="Number of entries in the database" name="db-count"></span>{sp}
+        / <span title="Number of entries in the source (Google spreadsheet)" name="source-count"></span>
+       <button>Upload</button>
+     </div>
+   </div>
+
+</div>
+{/template}
+
+
+/**
+ * Topic definition
+ */
+{template .toolsPanel}
+<div>
+  <button name="update-definition" title="Update definition from Google spreadsheet">
+    Update Definition
+  </button>
+</div>
+{/template}

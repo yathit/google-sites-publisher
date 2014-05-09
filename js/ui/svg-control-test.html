@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../../gss/base.css">
+    <title>SVG Control Test</title>
+    <script type="text/javascript" src="../../../closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript" src="../../../ydn-base/src/deps.js"></script>
+    <script type="text/javascript" src="../../../ydn/src/deps.js"></script>
+    <script type="text/javascript" src="../../../gdata/src/deps.js"></script>
+    <script type="text/javascript" src="../../../mbinfo-app-script/js/deps.js"></script>
+    <script type="text/javascript" src="../deps.js"></script>
+    <script type="text/javascript">
+        goog.require("mbi.ui.SvgControl");
+    </script>
+    <style>
+        #svg {
+            top: 0;
+            left: 0;
+        }
+        #svg-box {
+            margin-top: 10px;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+<div>some text</div>
+<div id="svg-box">
+<div id="svg"></div>
+</div>
+<script type="text/javascript">
+  var ele = document.getElementById('svg');
+  var ctl = new mbi.ui.SvgControl(ele);
+  ctl.load('../../images/tiger.svg');
+</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+{namespace templ.mbi.fig}
+
+
+
+/**
+* Edit figure content.
+*/
+{template .editFigure}
+  <div class="figure-toolbar toolbar">
+    <input type="file" name="upload-figure-file">
+    <button name="delete">Delete</button>
+    <button name="save">Publish</button>
+  </div>
+  <div class="copyrighted-figure">
+  </div>
+{/template}
+
+/**
+* Copyrighted figure page.
+* @param img_src var
+* @param name figure name.
+* @param title var
+* @param description var
+* @param author var
+* @param created var
+* @param license var
+* @param editable var
+* @param today var
+* @param page_url var
+*/
+{template .figure}
+
+  <h2>{$title}</h2>
+  {if not $img_src}
+    <div class="notfound">Figure {$name} not found.</div>
+  {else}
+	  <img src="{$img_src|noAutoescape}" alt="{$name}" />
+  {/if}
+
+	<h3>Summary</h3>
+
+	<table cellpadding="2"  class="figure-table">
+	<tbody>
+	<tr>
+	  <td>Title</td>
+	  <td name="title" {if $editable}contenteditable{/if}>{$title}</td>
+	</tr>
+  <tr>
+    <td>Description</td>
+    <td name="description" {if $editable}contenteditable{/if}>{$description}</td>
+  </tr>
+  <tr>
+    <td>Date</td>
+    <td name="created" {if $editable}contenteditable{/if}>{$created}</td>
+  </tr>
+  <tr>
+    <td>Author</td>
+    <td name="author" {if $editable}contenteditable{/if}>{$author}</td>
+  </tr>
+	<tr>
+	  <td>Permission</td>
+    {if $license}
+      <!-- Note: name attribute is given only if defined -->
+      <td name="license">{$license}</td>
+    {else}
+      <td>Modification, copying and distribution (commercial or non-commercial) of this image is strictly prohibited without written consent. Please contact MBInfo at <b>feedback@mechanobio.info</b> to request permission to use this image.</td>
+    {/if}
+	</tr>
+	</tbody>
+	</table>
+   <div class="citation-box">
+         <details>
+           <summary>How to cite this page?</summary>
+               <div class="citation">
+               <span class="author">
+                 MBInfo contributors.
+               </span>
+                {sp}
+               <span class="title">
+                 {$title}.{sp}
+               </span>
+
+               In <span class="journal-title">MBInfo Wiki</span>, Retrieved {$today} from {$page_url}
+               </div>
+         </details>
+       </div>
+
+
+{/template}
+
+
+
+/**
+* Figure box on wiki content.
+* @param editable var
+*/
+{template .figureBox}
+
+  <div class="wikic figure-img">
+    <img/>
+  </div>
+  <div class="wikir figure-toolbar">
+    <span class="figure-title" name="title"  {if $editable}contenteditable{/if}>Title</span>
+    <span>:{sp}</span>
+    <span class="figure-description" name="description"  {if $editable}contenteditable{/if}>Description</span>
+  </div>
+
+{/template}
+
+/**
+* List of figures.
+* @param rows table rows.
+*/
+{template .figureListTable}
+<table cellspacing = "0" cellpadding = "5">
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Title</th>
+      <th>Referred pages</th>
+      <th>Image</th>
+    </tr>
+  </thead>
+  <tbody>
+  {for $i in range(0, length($rows))}
+    <tr {if $rows[$i].deleted}style="display: none;"{/if}>
+      <td>
+        {$rows[$i].no}.
+      </td>
+      <td>
+        <span>
+          <a href="{$rows[$i].path}" class="title">
+            {$rows[$i].title}
+          </a>:{sp}
+        </span>
+        <span class="description">{$rows[$i].description}</span>
+      </td>
+      <td>
+        <ul class="reference">
+          {foreach $ref in $rows[$i].refs}
+            <li>
+              <a href="{$ref.href}">{$ref.name}</a>
+            </li>
+          {/foreach}
+        </ul>
+      </td>
+      <td>
+        <a href="{$rows[$i].path}">
+          {if $rows[$i].deleted}
+            <img/>
+          {else}
+            <img width="120" src="{$rows[$i].src}"/>
+          {/if}
+        </a>
+      </td>
+    </tr>
+  {/for}
+  </tbody>
+</table>
+{/template}
+
+
+/**
+* List of figures.
+* @param rows table rows.
+*/
+{template .selectFigure}
+<div class="select-figure">
+<ol>
+  {for $i in range(0, length($rows))}
+    <li name="{$i}">
+        <div>{$rows[$i].title}</div>
+        <img height="40" src="{$rows[$i].src}"/>
+    </li>
+  {/for}
+</ol>
+</div>
+{/template}
+
+/**
+ * Toolbar
+ */
+{template .toolbar}
+
+{/template}
+
+/**
+* List of figures.
+*/
+{template .figureList}
+<div class="figure-list">
+  <div class="toolbar">
+    <button name="publish" title="Publish the page to static site">Publish</button>
+  </div>
+  <h3>List of figures</h3>
+  <div class="figure-table"></div>
+</div>
+{/template}
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CorsConfig>
+    <Cors>
+        <Origins>
+            <Origin>http://static.mechanobio.info</Origin>
+            <Origin>http://mbinfo-backend.appspot.com</Origin>
+            <Origin>https://mbinfo-backend.appspot.com</Origin>
+            <Origin>http://localhost</Origin>
+            <Origin>chrome-extension://pbcpfkkhmlbicomenogobbagaaenlnpd</Origin>
+            <Origin>chrome-extension://mhigmmbegkpdlhjaphlffclbgkgelnbe</Origin>
+            <Origin>chrome-extension://jhmklemcneaienackijjhdikoicmoepp</Origin>
+            <Origin>chrome-extension://fcojbcccmkgamiifkdkkcplcjniiemmj</Origin>
+        </Origins>
+        <Methods>
+            <Method>GET</Method>
+            <Method>HEAD</Method>
+            <Method>POST</Method>
+            <Method>PUT</Method>
+            <Method>DELETE</Method>
+            <Method>PATCH</Method>
+        </Methods>
+        <ResponseHeaders>
+            <ResponseHeader>content-type</ResponseHeader>
+            <ResponseHeader>Authorization</ResponseHeader>
+            <ResponseHeader>etag</ResponseHeader>
+            <ResponseHeader>x-goog-stored-content-length</ResponseHeader>
+            <ResponseHeader>x-goog-metageneration</ResponseHeader>
+            <ResponseHeader>x-goog-generation</ResponseHeader>
+            <ResponseHeader>x-goog-meta-title</ResponseHeader>
+            <ResponseHeader>x-goog-meta-description</ResponseHeader>
+            <ResponseHeader>x-goog-meta-license</ResponseHeader>
+            <ResponseHeader>x-goog-meta-author</ResponseHeader>
+            <ResponseHeader>x-goog-meta-created</ResponseHeader>
+            <ResponseHeader>x-goog-api-version</ResponseHeader>
+        </ResponseHeaders>
+        <MaxAgeSec>60</MaxAgeSec>
+    </Cors>
+</CorsConfig>

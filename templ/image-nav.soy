@@ -1,0 +1,81 @@
+{namespace mbi.templ.ui}
+
+
+
+/**
+* Image base navigation.
+* @param imgUrl image url.
+*/
+{template .imgNav}
+<div class="imgnav-base">
+  <div class="imgnav-cell first">
+    <img src="{$imgUrl|noAutoescape}"/>
+  </div>
+  <span class="imgnav-panels">
+    {call .imgPanel data="all" /}
+  </span>
+</div>
+{/template}
+
+
+
+/**
+* Image base navigation.
+*/
+{template .orbNav}
+<div class="orb-base">
+  <div class="orb-cell first">
+    <span class="bg-image">
+    </span>
+  </div>
+  <span class="orb-panels">
+    {call .orbPanel data="all" /}
+  </span>
+</div>
+{/template}
+
+
+/**
+* Image base navigation.
+* @param panels image panels.
+* @param url_base
+*/
+{template .orbPanel}
+
+  {foreach $panel in $panels}
+    <div class="orb-cell">
+      {if $panel['title']}
+        <h3>{$panel['title']}</h3>
+      {/if}
+      <ul>
+        {foreach $link in $panel['links']}
+           <li><a href="{$url_base}{$link['url']}">{$link['title']}</a></li>
+        {/foreach}
+      </ul>
+    </div>
+  {/foreach}
+
+{/template}
+
+
+/**
+* Image base navigation.
+* @param panels image panels.
+* @param url_base
+*/
+{template .imgPanel}
+
+  {foreach $panel in $panels}
+    <div class="imgnav-cell">
+      {if $panel['title']}
+        <h3>{$panel['title']}</h3>
+      {/if}
+      <ul>
+        {foreach $link in $panel['links']}
+           <li><a href="{$url_base}{$link['url']}">{$link['title']}</a></li>
+        {/foreach}
+      </ul>
+    </div>
+  {/foreach}
+
+{/template}

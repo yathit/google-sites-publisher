@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test for Renderer</title>
+</head>
+<body>
+
+<script src="../../../closure-library/closure/goog/base.js"></script>
+<script src="../../../closure-library/closure/goog/deps.js"></script>
+<script src="../../../mbinfo-app-script/js/deps.js"></script>
+<script src="../../../ydn-base/src/deps.js"></script>
+<script src="../../../ydn-db/src/deps.js"></script>
+<script src="../../../ydn-db-sync/src/deps.js"></script>
+<script src="../../../gdata/src/deps.js"></script>
+<script src="../../../ydn/src/deps.js"></script>
+<script type="text/javascript" src="../../js/deps.js"></script>
+
+<script type="text/javascript">
+    goog.require('goog.testing.jsunit');
+    goog.require('mbi.wiki.Renderer');
+
+    var match_test = function(s, exp) {
+        assertArrayEquals(s, mbi.wiki.Renderer.matchAnnotation(s), exp)
+    };
+
+    var test_annotation_match = function() {
+        assertArrayEquals('uniprot', ['P123456', undefined, undefined],
+                mbi.wiki.Renderer.matchAnnotation('uniprot:P123456'));
+        assertArrayEquals('family', [undefined, 'Actin', undefined],
+                mbi.wiki.Renderer.matchAnnotation('family:Actin'));
+        assertArrayEquals('family', [undefined, 'Beta actin', undefined],
+                mbi.wiki.Renderer.matchAnnotation('family:Beta actin'));
+        assertArrayEquals('family', [undefined, 'alpha-actin', undefined],
+                mbi.wiki.Renderer.matchAnnotation('family:alpha-actin'));
+        assertArrayEquals('go', [undefined, undefined, '2345'],
+                mbi.wiki.Renderer.matchAnnotation('go:2345'));
+        assertArrayEquals('gos', [undefined, undefined, '2345,231'],
+                mbi.wiki.Renderer.matchAnnotation('go:2345,231'));
+        assertArrayEquals('family-uniprot', ['P123456', 'Actin', undefined],
+                mbi.wiki.Renderer.matchAnnotation('family:Actin|uniprot:P123456'));
+        assertArrayEquals('family-uniprot-go', ['P123456', 'Actin', '234,567'],
+                mbi.wiki.Renderer.matchAnnotation('family:Actin|uniprot:P123456|go:234,567'));
+    };
+</script>
+
+</body>
+</html>

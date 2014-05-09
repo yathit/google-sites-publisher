@@ -1,0 +1,818 @@
+
+/*
+* Closure Library CSS
+*/
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Styles for goog.ui.ac.AutoComplete and its derivatives.
+ * Note: these styles need some work to get them working properly at various
+ * font sizes other than the default.
+ *
+ * @author pupius@google.com (Daniel Pupius)
+ * @author annams@google.com (Srinivas Annam)
+ */
+
+
+/*
+ * TODO(annams): Rename (here and in renderer.js) to specify class name as
+ * goog-autocomplete-renderer
+ */
+.ac-renderer {
+  font: normal 13px Arial, sans-serif;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #666;
+  -moz-box-shadow: 2px 2px 2px rgba(102, 102, 102, .4);
+  -webkit-box-shadow: 2px 2px 2px rgba(102, 102, 102, .4);
+  width: 300px;
+}
+
+.ac-row {
+  cursor: pointer;
+  padding: .4em;
+}
+
+.ac-highlighted {
+  font-weight: bold;
+}
+
+.ac-active {
+  background-color: #b2b4bf;
+}
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Cross-browser implementation of the "display: inline-block" CSS property.
+ * See http://www.w3.org/TR/CSS21/visuren.html#propdef-display for details.
+ * Tested on IE 6 & 7, FF 1.5 & 2.0, Safari 2 & 3, Webkit, and Opera 9.
+ *
+ * @author attila@google.com (Attila Bodis)
+ */
+
+/*
+ * Default rule; only Safari, Webkit, and Opera handle it without hacks.
+ */
+.goog-inline-block {
+  position: relative;
+  display: -moz-inline-box; /* Ignored by FF3 and later. */
+  display: inline-block;
+}
+
+/*
+ * Pre-IE7 IE hack.  On IE, "display: inline-block" only gives the element
+ * layout, but doesn't give it inline behavior.  Subsequently setting display
+ * to inline does the trick.
+ */
+* html .goog-inline-block {
+  display: inline;
+}
+
+/*
+ * IE7-only hack.  On IE, "display: inline-block" only gives the element
+ * layout, but doesn't give it inline behavior.  Subsequently setting display
+ * to inline does the trick.
+ */
+*:first-child+html .goog-inline-block {
+  display: inline;
+}
+/*
+ * Copyright 2007 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/* Author: pupius@google.com (Daniel Pupius) */
+/* Author: pallosp@google.com (Peter Pallos) */
+
+/* Styles for goog.ui.ComboBox and its derivatives. */
+
+
+.goog-combobox {
+  background: #ddd url(https://ssl.gstatic.com/closure/button-bg.gif) repeat-x scroll left top;
+  border: 1px solid #b5b6b5;
+  font: normal small arial, sans-serif;
+}
+
+.goog-combobox input {
+  background-color: #fff;
+  border: 0;
+  border-right: 1px solid #b5b6b5;
+  color: #000;
+  font: normal small arial, sans-serif;
+  margin: 0;
+  padding: 0 0 0 2px;
+  vertical-align: bottom; /* override demo.css */
+  width: 200px;
+}
+
+.goog-combobox input.label-input-label {
+  background-color: #fff;
+  color: #aaa;
+}
+
+.goog-combobox .goog-menu {
+  margin-top: -1px;
+  width: 219px;  /* input width + button width + 3 * 1px border */
+  z-index: 1000;
+}
+
+.goog-combobox-button {
+  cursor: pointer;
+  display: inline-block;
+  font-size: 10px;
+  text-align: center;
+  width: 16px;
+}
+
+/* IE6 only hack */
+* html .goog-combobox-button {
+  padding: 0 3px;
+}
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Standard styling for menus created by goog.ui.MenuRenderer.
+ *
+ * @author attila@google.com (Attila Bodis)
+ */
+
+
+.goog-menu {
+  background: #fff;
+  border-color: #ccc #666 #666 #ccc;
+  border-style: solid;
+  border-width: 1px;
+  cursor: default;
+  font: normal 13px Arial, sans-serif;
+  margin: 0;
+  outline: none;
+  padding: 4px 0;
+  position: absolute;
+  z-index: 20000; /* Arbitrary, but some apps depend on it... */
+}
+/*
+ * Copyright 2012 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * styling for goog.ui.menuBar and child buttons.
+ *
+ * @author tvykruta@google.com (Tomas Vykruta)
+ */
+
+
+.goog-menubar {
+  cursor: default;
+  outline: none;
+  position: relative;
+  white-space: nowrap;
+  background: #fff;
+}
+
+.goog-menubar .goog-menu-button {
+  padding: 1px 1px;
+  margin: 0px 0px;
+  outline: none;
+  border: none;
+  background: #fff;
+  /* @alternate */ border: 1px solid #fff;
+}
+
+.goog-menubar .goog-menu-button-dropdown {
+  display: none;
+}
+
+.goog-menubar .goog-menu-button-outer-box {
+  border: none;
+}
+
+.goog-menubar .goog-menu-button-inner-box {
+  border: none;
+}
+
+.goog-menubar .goog-menu-button-hover {
+  background: #eee;
+  border: 1px solid #eee;
+}
+
+.goog-menubar .goog-menu-button-open {
+  background: #fff;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.goog-menubar .goog-menu-button-disabled {
+  color: #ccc;
+}
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Standard styling for menus created by goog.ui.MenuItemRenderer.
+ *
+ * @author attila@google.com (Attila Bodis)
+ */
+
+
+/**
+ * State: resting.
+ *
+ * NOTE(mleibman,chrishenry):
+ * The RTL support in Closure is provided via two mechanisms -- "rtl" CSS
+ * classes and BiDi flipping done by the CSS compiler.  Closure supports RTL
+ * with or without the use of the CSS compiler.  In order for them not
+ * to conflict with each other, the "rtl" CSS classes need to have the @noflip
+ * annotation.  The non-rtl counterparts should ideally have them as well, but,
+ * since .goog-menuitem existed without .goog-menuitem-rtl for so long before
+ * being added, there is a risk of people having templates where they are not
+ * rendering the .goog-menuitem-rtl class when in RTL and instead rely solely
+ * on the BiDi flipping by the CSS compiler.  That's why we're not adding the
+ * @noflip to .goog-menuitem.
+ */
+.goog-menuitem {
+  color: #000;
+  font: normal 13px Arial, sans-serif;
+  list-style: none;
+  margin: 0;
+  /* 28px on the left for icon or checkbox; 7em on the right for shortcut. */
+  padding: 4px 7em 4px 28px;
+  white-space: nowrap;
+}
+
+/* BiDi override for the resting state. */
+/* @noflip */
+.goog-menuitem.goog-menuitem-rtl {
+  /* Flip left/right padding for BiDi. */
+  padding-left: 7em;
+  padding-right: 28px;
+}
+
+/* If a menu doesn't have checkable items or items with icons, remove padding. */
+.goog-menu-nocheckbox .goog-menuitem,
+.goog-menu-noicon .goog-menuitem {
+  padding-left: 12px;
+}
+
+/*
+ * If a menu doesn't have items with shortcuts, leave just enough room for
+ * submenu arrows, if they are rendered.
+ */
+.goog-menu-noaccel .goog-menuitem {
+  padding-right: 20px;
+}
+
+.goog-menuitem-content {
+  color: #000;
+  font: normal 13px Arial, sans-serif;
+}
+
+/* State: disabled. */
+.goog-menuitem-disabled .goog-menuitem-accel,
+.goog-menuitem-disabled .goog-menuitem-content {
+  color: #ccc !important;
+}
+.goog-menuitem-disabled .goog-menuitem-icon {
+  opacity: 0.3;
+  -moz-opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
+/* State: hover. */
+.goog-menuitem-highlight,
+.goog-menuitem-hover {
+  background-color: #d6e9f8;
+  /* Use an explicit top and bottom border so that the selection is visible
+   * in high contrast mode. */
+  border-color: #d6e9f8;
+  border-style: dotted;
+  border-width: 1px 0;
+  padding-bottom: 3px;
+  padding-top: 3px;
+}
+
+/* State: selected/checked. */
+.goog-menuitem-checkbox,
+.goog-menuitem-icon {
+  background-repeat: no-repeat;
+  height: 16px;
+  left: 6px;
+  position: absolute;
+  right: auto;
+  vertical-align: middle;
+  width: 16px;
+}
+
+/* BiDi override for the selected/checked state. */
+/* @noflip */
+.goog-menuitem-rtl .goog-menuitem-checkbox,
+.goog-menuitem-rtl .goog-menuitem-icon {
+  /* Flip left/right positioning. */
+  left: auto;
+  right: 6px;
+}
+
+.goog-option-selected .goog-menuitem-checkbox,
+.goog-option-selected .goog-menuitem-icon {
+  /* Client apps may override the URL at which they serve the sprite. */
+  background: url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px 0;
+}
+
+/* Keyboard shortcut ("accelerator") style. */
+.goog-menuitem-accel {
+  color: #999;
+  /* Keyboard shortcuts are untranslated; always left-to-right. */
+  /* @noflip */ direction: ltr;
+  left: auto;
+  padding: 0 6px;
+  position: absolute;
+  right: 0;
+  text-align: right;
+}
+
+/* BiDi override for shortcut style. */
+/* @noflip */
+.goog-menuitem-rtl .goog-menuitem-accel {
+  /* Flip left/right positioning and text alignment. */
+  left: 0;
+  right: auto;
+  text-align: left;
+}
+
+/* Mnemonic styles. */
+.goog-menuitem-mnemonic-hint {
+  text-decoration: underline;
+}
+
+.goog-menuitem-mnemonic-separator {
+  color: #999;
+  font-size: 12px;
+  padding-left: 4px;
+}
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Standard styling for buttons created by goog.ui.MenuButtonRenderer.
+ *
+ * @author attila@google.com (Attila Bodis)
+ */
+
+
+/* State: resting. */
+.goog-menu-button {
+  /* Client apps may override the URL at which they serve the image. */
+  background: #ddd url(https://ssl.gstatic.com/editor/button-bg.png) repeat-x top left;
+  border: 0;
+  color: #000;
+  cursor: pointer;
+  list-style: none;
+  margin: 2px;
+  outline: none;
+  padding: 0;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+/* Pseudo-rounded corners. */
+.goog-menu-button-outer-box,
+.goog-menu-button-inner-box {
+  border-style: solid;
+  border-color: #aaa;
+  vertical-align: top;
+}
+.goog-menu-button-outer-box {
+  margin: 0;
+  border-width: 1px 0;
+  padding: 0;
+}
+.goog-menu-button-inner-box {
+  margin: 0 -1px;
+  border-width: 0 1px;
+  padding: 3px 4px;
+}
+
+/* Pre-IE7 IE hack; ignored by IE7 and all non-IE browsers. */
+* html .goog-menu-button-inner-box {
+  /* IE6 needs to have the box shifted to make the borders line up. */
+  left: -1px;
+}
+
+/* Pre-IE7 BiDi fixes. */
+* html .goog-menu-button-rtl .goog-menu-button-outer-box {
+  /* @noflip */ left: -1px;
+  /* @noflip */ right: auto;
+}
+* html .goog-menu-button-rtl .goog-menu-button-inner-box {
+  /* @noflip */ right: auto;
+}
+
+/* IE7-only hack; ignored by all other browsers. */
+*:first-child+html .goog-menu-button-inner-box {
+  /* IE7 needs to have the box shifted to make the borders line up. */
+  left: -1px;
+}
+/* IE7 BiDi fix. */
+*:first-child+html .goog-menu-button-rtl .goog-menu-button-inner-box {
+  /* @noflip */ left: 1px;
+  /* @noflip */ right: auto;
+}
+
+/* Safari-only hacks. */
+::root .goog-menu-button,
+::root .goog-menu-button-outer-box,
+::root .goog-menu-button-inner-box {
+  /* Required to make pseudo-rounded corners work on Safari. */
+  line-height: 0;
+}
+::root .goog-menu-button-caption,
+::root .goog-menu-button-dropdown {
+  /* Required to make pseudo-rounded corners work on Safari. */
+  line-height: normal;
+}
+
+/* State: disabled. */
+.goog-menu-button-disabled {
+  background-image: none !important;
+  opacity: 0.3;
+  -moz-opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+.goog-menu-button-disabled .goog-menu-button-outer-box,
+.goog-menu-button-disabled .goog-menu-button-inner-box,
+.goog-menu-button-disabled .goog-menu-button-caption,
+.goog-menu-button-disabled .goog-menu-button-dropdown {
+  color: #333 !important;
+  border-color: #999 !important;
+}
+
+/* Pre-IE7 IE hack; ignored by IE7 and all non-IE browsers. */
+* html .goog-menu-button-disabled {
+  margin: 2px 1px !important;
+  padding: 0 1px !important;
+}
+
+/* IE7-only hack; ignored by all other browsers. */
+*:first-child+html .goog-menu-button-disabled {
+  margin: 2px 1px !important;
+  padding: 0 1px !important;
+}
+
+/* State: hover. */
+.goog-menu-button-hover .goog-menu-button-outer-box,
+.goog-menu-button-hover .goog-menu-button-inner-box {
+  border-color: #9cf #69e #69e #7af !important; /* Hover border wins. */
+}
+
+/* State: active, open. */
+.goog-menu-button-active,
+.goog-menu-button-open {
+  background-color: #bbb;
+  background-position: bottom left;
+}
+
+/* State: focused. */
+.goog-menu-button-focused .goog-menu-button-outer-box,
+.goog-menu-button-focused .goog-menu-button-inner-box {
+  border-color: orange;
+}
+
+/* Caption style. */
+.goog-menu-button-caption {
+  padding: 0 4px 0 0;
+  vertical-align: top;
+}
+
+/* Dropdown arrow style. */
+.goog-menu-button-dropdown {
+  height: 15px;
+  width: 7px;
+  /* Client apps may override the URL at which they serve the sprite. */
+  background: url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -388px 0;
+  vertical-align: top;
+}
+
+/* Pill (collapsed border) styles. */
+/* TODO(gboyer): Remove specific menu button styles and have any button support being a menu button. */
+.goog-menu-button-collapse-right,
+.goog-menu-button-collapse-right .goog-menu-button-outer-box,
+.goog-menu-button-collapse-right .goog-menu-button-inner-box {
+  margin-right: 0;
+}
+
+.goog-menu-button-collapse-left,
+.goog-menu-button-collapse-left .goog-menu-button-outer-box,
+.goog-menu-button-collapse-left .goog-menu-button-inner-box {
+  margin-left: 0;
+}
+
+.goog-menu-button-collapse-left .goog-menu-button-inner-box  {
+  border-left: 1px solid #fff;
+}
+
+.goog-menu-button-collapse-left.goog-menu-button-checked
+.goog-menu-button-inner-box {
+  border-left: 1px solid #ddd;
+}
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Standard styling for menus created by goog.ui.MenuSeparatorRenderer.
+ *
+ * @author attila@google.com (Attila Bodis)
+ */
+
+
+.goog-menuseparator {
+  border-top: 1px solid #ccc;
+  margin: 4px 0;
+  padding: 0;
+}
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Standard styling for menus created by goog.ui.SubMenuRenderer.
+ *
+ * @author attila@google.com (Attila Bodis)
+ */
+
+
+/* State: resting. */
+/* @noflip */
+.goog-submenu-arrow {
+  color: #000;
+  left: auto;
+  padding-right: 6px;
+  position: absolute;
+  right: 0;
+  text-align: right;
+}
+
+/* BiDi override. */
+/* @noflip */
+.goog-menuitem-rtl .goog-submenu-arrow {
+  text-align: left;
+  left: 0;
+  right: auto;
+  padding-left: 6px;
+}
+
+/* State: disabled. */
+.goog-menuitem-disabled .goog-submenu-arrow {
+  color: #ccc;
+}
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Standard styling for goog.ui.Dialog.
+ *
+ * @author ssaviano@google.com (Steven Saviano)
+ * @author attila@google.com (Attila Bodis)
+ */
+
+
+.modal-dialog {
+  background: #c1d9ff;
+  border: 1px solid #3a5774;
+  color: #000;
+  padding: 4px;
+  position: absolute;
+}
+
+.modal-dialog a,
+.modal-dialog a:link,
+.modal-dialog a:visited  {
+  color: #06c;
+  cursor: pointer;
+}
+
+.modal-dialog-bg {
+  background: #666;
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+.modal-dialog-title {
+  background: #e0edfe;
+  color: #000;
+  cursor: pointer;
+  font-size: 120%;
+  font-weight: bold;
+
+  /* Add padding on the right to ensure the close button has room. */
+  padding: 8px 31px 8px 8px;
+
+  position: relative;
+  _zoom: 1; /* Ensures proper width in IE6 RTL. */
+}
+
+.modal-dialog-title-close {
+  /* Client apps may override the URL at which they serve the sprite. */
+  background: #e0edfe url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -528px 0;
+  cursor: default;
+  height: 15px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 15px;
+  vertical-align: middle;
+}
+
+.modal-dialog-buttons,
+.modal-dialog-content {
+  background-color: #fff;
+  padding: 8px;
+}
+
+.goog-buttonset-default {
+  font-weight: bold;
+}
+/*
+ * Copyright 2007 The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/* Author: arv@google.com (Erik Arvidsson) */
+/* Author: eae@google.com (Emil A Eklund) */
+/* Author: jonp@google.com (Jon Perlow) */
+
+/*
+  TODO(arv): Currently the sprite image has the height 16px. We should make the
+  image taller which would allow better flexibility when it comes to the height
+  of a tree row.
+*/
+
+.goog-tree-root:focus {
+  outline: none;
+}
+
+.goog-tree-row {
+  white-space: nowrap;
+  font: icon;
+  line-height: 16px;
+  height: 16px;
+}
+
+.goog-tree-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goog-tree-children {
+  background-repeat: repeat-y;
+  background-image: url(https://ssl.gstatic.com/closure/tree/I.png) !important;
+  background-position-y: 1px !important;	/* IE only */
+  font: icon;
+}
+
+.goog-tree-children-nolines {
+  font: icon;
+}
+
+.goog-tree-icon {
+  background-image: url(https://ssl.gstatic.com/closure/tree/tree.png);
+}
+
+.goog-tree-expand-icon {
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+  cursor: default;
+}
+
+.goog-tree-expand-icon-plus {
+  width: 19px;
+  background-position: 0 0;
+}
+
+.goog-tree-expand-icon-minus {
+  width: 19px;
+  background-position: -24px 0;
+}
+
+.goog-tree-expand-icon-tplus {
+  width: 19px;
+  background-position: -48px 0;
+}
+
+.goog-tree-expand-icon-tminus {
+  width: 19px;
+  background-position: -72px 0;
+}
+
+.goog-tree-expand-icon-lplus {
+  width: 19px;
+  background-position: -96px 0;
+}
+
+.goog-tree-expand-icon-lminus {
+  width: 19px;
+  background-position: -120px 0;
+}
+
+.goog-tree-expand-icon-t {
+  width: 19px;
+  background-position: -144px 0;
+}
+
+.goog-tree-expand-icon-l {
+  width: 19px;
+  background-position: -168px 0;
+}
+
+.goog-tree-expand-icon-blank {
+  width: 19px;
+  background-position: -168px -24px;
+}
+
+.goog-tree-collapsed-folder-icon {
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+  background-position: -0px -24px;
+}
+
+.goog-tree-expanded-folder-icon {
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+  background-position: -24px -24px;
+}
+
+.goog-tree-file-icon {
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+  background-position: -48px -24px;
+}
+
+.goog-tree-item-label {
+  margin-left: 3px;
+  padding: 1px 2px 1px 2px;
+  text-decoration: none;
+  color: WindowText;
+  cursor: default;
+}
+
+.goog-tree-item-label:hover {
+  text-decoration: underline;
+}
+
+.selected .goog-tree-item-label {
+  background-color: ButtonFace;
+  color: ButtonText;
+}
+
+.focused .selected .goog-tree-item-label {
+  background-color: Highlight;
+  color: HighlightText;
+}
+
+.goog-tree-hide-root {
+  display: none;
+}

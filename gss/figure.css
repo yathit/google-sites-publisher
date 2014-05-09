@@ -1,0 +1,171 @@
+/* Figure box inside wiki content */
+.figure-placeholder {
+    width: 100px;
+    height: 100px;
+    margin: 4px;
+    border: thin #d3d3d3 dashed;
+}
+
+.figure-box {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 12px 0;
+    background-color: #f9f9f9;
+    font-size: 80%;
+}
+
+
+.figure-title {
+    font-weight: bold;
+}
+
+.figure-img {
+    border: 1px solid #d3d3d3;
+    background-color: #ffffff;
+    padding: 3px;
+}
+
+/* Figure page */
+
+#section-figure {
+
+}
+
+.copyrighted-figure img {
+    max-width:600px;
+}
+
+#section-figure h3 {
+    font-weight: bold;
+    font-size: 150%;
+    margin: 2em 0 0 0;
+}
+
+#section-figure table.figure-table {
+    background: Beige;
+    border: thin solid grey;
+    margin: 1em;
+    padding: 4px;
+}
+
+.figure-table tr td:first-child {
+    background: #deb887;
+    text-align: right;
+    vertical-align: top;
+    padding-right: 0.4em;
+    width: 15%;
+    font-weight: bold;
+}
+
+.figure-table th:first-child {
+    background: #deb887;
+}
+
+.figure-table tr td:last-child {
+    display: table-cell;
+    vertical-align: inherit;
+}
+
+.copyright-box {
+    padding: 8px;
+    margin: 1em;
+    vertical-align: middle;
+}
+
+.copyright-box .copyright-icon {
+    float: left;
+    padding: 8px 16px;
+    width: 50px;
+}
+
+.copyright-icon .copyright-char {
+    font-size: 60px;
+    font-weight: bold;
+    font-family: Arial Black, Gadget, sans-serif;
+    color: red;
+    line-height: 60px;
+    text-align: center;
+}
+
+div.copyright-icon+span {
+    padding:1em;
+}
+
+.figure-upload .notfound {
+    background-color: #fafad2;
+    border: thin solid black;
+    padding: 8px;
+}
+
+.figure-list {
+    margin: 4px 8px;
+}
+
+.figure-table {
+    border: 2px solid black;
+}
+
+.figure-list table {
+    width: 100%;
+}
+
+.figure-list thead th {
+    font-variant: small-caps;
+    border-bottom: 2px solid black;
+    font-weight: normal;
+}
+
+
+.figure-list table .title {
+    font-weight: bold;
+}
+
+.figure-list table td:first-child {
+    width: 1em;
+}
+
+.figure-list table .title a {
+   text-decoration: none;
+}
+
+.figure-list table tbody td {
+    /* border-top: 1px dotted gray; */
+}
+
+.figure-list table td  {
+    vertical-align: top;
+}
+
+.citation-box {
+    margin: 1em;
+}
+
+.citation-box summary {
+    cursor: pointer;
+}
+
+.citation-box .citation {
+    margin: 1em;
+}
+
+
+
+.video-caption {
+    padding: 5px 0;
+    margin: 0 0 12px 0;
+    font-size: 80%;
+}
+
+
+.video-caption .video-title {
+    font-weight: bold;
+}
+
+.video-caption .description {
+
+}
+
+.figure-table ul.reference {
+    padding-left: 0;
+    list-style: none;
+}

@@ -1,0 +1,906 @@
+<project name="mbi-app" basedir="." default="comp-debug">
+    <dirname property="mbi-app.dir" file="${ant.file.mbi-app}"/>
+    <property name="work.dir" location="${mbi-app.dir}/.." />
+    <property name="home.dir" location="${user.home}"/>
+    <property name="db-work.dir" location="${work.dir}"/>
+    <property name="publish.dir" location="${home.dir}/publish" description="application package output location"/>
+    <property name="site-name" value="2013-04-22"/>
+    <property name="data-version" value="b"/>
+    <property name="asset.bk" value="mbinfo" description="bucket name for static resources"/>
+    <property name="asset.domain-unquote" value="d2pcdzxxk9dfpa.cloudfront.net" description="static resource server domain"/>
+    <property name="asset.domain" value="'d2pcdzxxk9dfpa.cloudfront.net'" description="static resource server domain"/>
+    <property name="html.bk" value="www.mechanobio.info" description="bucket name for static web site"/>
+    <property name="html-debug.bk" value="mbinfo" description="bucket name for static web site for debugging"/>
+    <property name="mbi-app-ver-major" value="1"/>
+    <property name="mbi-app-ver-minor" value="5"/>
+    <property name="mbi-app-ver-patch" value="10"/>
+    <property name="mbi-app-ver" value="${mbi-app-ver-major}.${mbi-app-ver-minor}.${mbi-app-ver-patch}"/>
+    <property name="out.fn" value="mbi-app-${mbi-app-ver}.js"/>
+    <property name="data.fn" value="data-${site-name}${data-version}.js"/>
+    <property name="lib.dir" location="${work.dir}/../lib"/>
+    <property name="mbi.dir" location="${work.dir}/mbinfo-app-script"/>
+
+    <property name="jtidy.jar" value="${lib.dir}/jtidy/target/jtidy-r938.jar"/>
+    <property name="backup.dir" location="${home.dir}/Downloads/backup"/>
+    <condition property="gsutil" value="${lib.dir}/gsutil/gsutil"><os family="windows"/></condition>
+    <condition property="gsutil" value="~/opt/gsutil/gsutil"><os family="unix"/></condition>
+
+    <property name="closure-library.dir"
+              value="${work.dir}/closure-library"/>
+    <property name="closure-compiler.dir" value="${lib.dir}/closure-compiler"/>
+    <property name="closure-compiler.jar" value="${closure-compiler.dir}/build/compiler.jar"/>
+    <property name="closure-templates.dir" value="${lib.dir}/closure-templates"/>
+    <property name="closure-stylesheets.dir" value="${lib.dir}/closure-stylesheets"/>
+    <property name="google-sites-liberation.jar" value="${lib.dir}/google-sites-liberation/target/google-sites-liberation-1.0.4-SNAPSHOT-jar-with-dependencies.jar"/>
+    <property name="js-test-driver.jar" value="${lib.dir}/js-test-driver/JsTestDriver.jar"/>
+    <property name="outputwrapper.norun" value="(function(){%output%})();"/>
+    <property name="outputwrapper.app" value="(function(){%output%})();app=runApp();"/>
+    <property name="out.dir" location="${mbi-app.dir}/jsc"/>
+    <property name="combo-out.fn" value="combo.js"/>
+    <property name="protein-map-out.fn" value="domain.js"/>
+    <property name="linkout-out.fn" value="linkout.js"/>
+    <property name="templ.dir" location="${mbi-app.dir}/templ" />
+    <property name="css.dir" location="${mbi-app.dir}/css" />
+    <property name="gss.dir" location="${mbi-app.dir}/gss" />
+    <property name="data.dir" location="${mbi-app.dir}/data" />
+
+    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+             classpath="${closure-compiler.jar}"/>
+    <macrodef name="generate-wedget-template">
+        <attribute name="filename" />
+        <attribute name="input.dir" />
+        <attribute name="output.dir" default="@{input.dir}" />
+        <element name="templ-options" optional="true"/>
+        <sequential>
+            <java jar="${closure-templates.dir}/build/SoyToJsSrcCompiler.jar"
+                  fork="true" failonerror="true" logError="true" dir="@{input.dir}">
+                <arg line='--outputPathFormat "@{output.dir}/{INPUT_DIRECTORY}/{INPUT_FILE_NAME_NO_EXT}.soy.js"' />
+                <arg line="--cssHandlingScheme GOOG" />
+                <arg line="--shouldGenerateJsdoc" />
+                <templ-options/>
+                <arg line="--shouldProvideRequireSoyNamespaces" />
+                <arg line="'@{filename}'" />
+            </java>
+        </sequential>
+    </macrodef>
+    <macrodef name="gen-soy" description="Generate HTML from soy template">
+        <element name="soyoptionls" optional="yes" />
+        <attribute name="input.dir"/>
+        <attribute name="output.dir"/>
+        <sequential>
+            <echo>Running HTML template builder ...</echo>
+            <java classname="WebProducer">
+                <classpath>
+                    <pathelement location="${lib.dir}/soybuild/build"/>
+                    <pathelement location="${jtidy.jar}"/>
+                    <pathelement location="${lib.dir}/soybuild/commons-cli-1.2.jar"/>
+                    <pathelement location="${closure-templates.dir}/build/soy.jar"/>
+                    <pathelement location="${closure-templates.dir}/build/SoyParseInfoGenerator.jar"/>
+                </classpath>
+                <arg value="--input=@{input.dir}"/>
+                <arg value="--output=@{output.dir}"/>
+                <soyoptionls/>
+            </java>
+        </sequential>
+    </macrodef>
+    <macrodef name="gen-soy-web" description="Generate HTML from soy template using WebProducer">
+        <attribute name="output.fn" />
+        <attribute name="namespace"/>
+        <attribute name="templ.dir"/>
+        <attribute name="soy-map-data" default=""/>
+        <attribute name="soy-map-file" default=""/>
+        <attribute name="content-file" default=""/>
+        <element name="soy-web-optionls" optional="yes" />
+        <sequential>
+            <fileset dir="@{templ.dir}" id="soy.files">
+                <include name="**/*.soy"/>
+            </fileset>
+            <pathconvert pathsep="," property="soyfiles" refid="soy.files" dirsep="/">
+                <map from="@{templ.dir}/" to=""/>
+            </pathconvert>
+            <gen-soy output.dir="@{output.fn}" input.dir="@{templ.dir}">
+                <soyoptionls>
+                    <arg value="--namespace=@{namespace}"/>
+                    <arg value="--template=${soyfiles}"/>
+                    <arg value="--soy-map-data=@{soy-map-data}"/>
+                    <arg value="--soy-map-file=@{soy-map-file}"/>
+                    <arg value="--content-file=@{content-file}"/>
+                    <soy-web-optionls/>
+                </soyoptionls>
+            </gen-soy>
+            <echo>"output file: @{output.fn}"</echo>
+        </sequential>
+    </macrodef>
+    <macrodef name="closure-jscomp" description="compile closure">
+        <attribute name="compilationlevel" default="advanced"/>
+        <attribute name="generate-exports" default="false"/>
+        <attribute name="debug" default="false"/>
+        <attribute name="input.dir"/>
+        <attribute name="input.fn"/>
+        <element name="input" optional="true"/>
+        <element name="path-dir" optional="true"/>
+        <attribute name="output.fn"/>
+        <sequential>
+            <jscomp compilationlevel="@{compilationlevel}" warning="VERBOSE"
+                    debug="@{debug}"
+                    output="@{output.fn}"
+                    generateexports="true"
+                    managedependencies="true">
+                <externs dir="${closure-compiler.dir}/externs">
+                    <file name="browser.js"/>
+                </externs>
+                <path>
+                    <fileset dir="${closure-library.dir}/closure/goog">
+                        <include name="*.js"/>
+                        <depth max="7" min="1"/>
+                    </fileset>
+                </path>
+                <sources dir="@{input.dir}">
+                    <file name="@{input.fn}"/>
+                </sources>
+
+
+                <warning level="ERROR" group="accessControls"/>
+
+            </jscomp>
+            <echo>"@{output.fn}" generated.</echo>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="closure-compile">
+        <element name="cssmap" optional="yes"/>
+        <element name="options" optional="yes"/>
+        <element name="extrapaths" optional="yes"/>
+        <attribute name="input.dir"/>
+        <attribute name="base.dir" default="@{input.dir}" />
+        <attribute name="compilerjarfile" default="${closure-compiler.jar}"/>
+        <attribute name="compilationlevel" default="ADVANCED_OPTIMIZATIONS"/>
+        <attribute name="outputmode" default="compiled"/>
+        <attribute name="input"/>
+        <attribute name="output.fn"/>
+        <sequential>
+            <exec executable="python" failonerror="true" logError="true" dir="@{base.dir}">
+                <arg value="${closure-library.dir}/closure/bin/calcdeps.py"/>
+                <arg line='-i "@{input}"'/>
+                <arg line='--output_file "@{output.fn}"'/>
+                <arg line='-p "${closure-library.dir}"'/>
+                <arg line='-p "@{input.dir}"'/>
+                <arg line="-o @{outputmode}"/>
+                <arg line='-c "@{compilerjarfile}"'/>
+                <arg line='-f "--compilation_level=@{compilationlevel}"'/>
+                <arg line='-f "--js=${closure-library.dir}/closure/goog/deps.js"'/>
+
+                <arg line='-f "--language_in=ECMASCRIPT5"'/>
+                <arg line='-f "--use_types_for_optimization"'/>
+                <arg line='-f "--jscomp_warning=uselessCode"'/>
+                <arg line='-f "--jscomp_error=accessControls"'/>
+                <arg line='-f "--jscomp_error=ambiguousFunctionDecl"'/>
+                <arg line='-f "--jscomp_error=checkDebuggerStatement"'/>
+                <arg line='-f "--jscomp_error=checkEventfulObjectDisposal"'/>
+                <arg line='-f "--jscomp_error=checkRegExp"'/>
+                <arg line='-f "--jscomp_error=checkTypes"'/>
+                <arg line='-f "--jscomp_error=checkVars"'/>
+                <arg line='-f "--jscomp_error=const"'/>
+                <arg line='-f "--jscomp_error=constantProperty"'/>
+                <arg line='-f "--jscomp_warning=deprecated"'/>
+                <arg line='-f "--jscomp_error=duplicateMessage"'/>
+                <arg line='-f "--jscomp_error=es5Strict"'/>
+                <arg line='-f "--jscomp_error=externsValidation"'/>
+                <arg line='-f "--jscomp_error=globalThis"'/>
+                <arg line='-f "--jscomp_error=internetExplorerChecks"'/>
+                <arg line='-f "--jscomp_error=invalidCasts"'/>
+                <arg line='-f "--jscomp_error=internetExplorerChecks"'/>
+                <arg line='-f "--jscomp_error=misplacedTypeAnnotation"'/>
+                <arg line='-f "--jscomp_error=missingProperties"'/>
+                <arg line='-f "--jscomp_error=nonStandardJsDocs"'/>
+                <arg line='-f "--jscomp_error=strictModuleDepCheck"'/>
+                <arg line='-f "--jscomp_error=typeInvalidation"'/>
+                <arg line='-f "--jscomp_error=undefinedNames"'/>
+                <arg line='-f "--jscomp_error=undefinedVars"'/>
+                <arg line='-f "--jscomp_error=unknownDefines"'/>
+                <arg line='-f "--jscomp_warning=uselessCode"'/>
+                <arg line='-f "--jscomp_error=visibility"'/>
+                <arg line='-f "--warning_level=VERBOSE"'/>
+                <extrapaths/>
+                <options/>
+            </exec>
+            <echo>"@{output.fn}" generated.</echo>
+        </sequential>
+    </macrodef>
+    <macrodef name="calcdeps">
+        <attribute name="input"/>
+        <attribute name="input.dir"/>
+        <attribute name="output.fn" default="std"/>
+        <sequential>
+            <exec executable="python" failonerror="true" logerror="true">
+                <arg value="${closure-library.dir}/closure/bin/calcdeps.py"/>
+                <arg line='-i "@{input}"'/>
+                <arg line='-p "${closure-library.dir}"'/>
+                <arg line='-p "@{input.dir}"'/>
+                <arg line="-o list"/>
+            </exec>
+        </sequential>
+    </macrodef>
+    <macrodef name="backup-site" description="Backup Google Sites">
+        <attribute name="sitename"/>
+        <attribute name="out.dir"/>
+        <attribute name="domain" default="mechanobio.info"/>
+        <sequential>
+            <echo>Running backup ...</echo>
+            <mkdir dir="@{out.dir}"/>
+            <java classname="com.google.sites.liberation.imprt.Main">
+                <classpath>
+                    <pathelement location="${google-sites-liberation.jar}"/>
+                </classpath>
+                <arg line='-d @{domain}'/>
+                <arg line="-w https://sites.google.com/a/@{domain}/@{sitename}"/>
+                <arg line='-f "@{out.dir}"'/>
+                <arg line="-u agent102@blueprint.org"/>
+                <arg line="-p matrix*1"/>
+                <arg line="-r"/>
+            </java>
+            <echo>
+                Saved to "@{out.dir}"
+            </echo>
+        </sequential>
+    </macrodef>
+
+    <target name="webapp-debug" description="compile JS">
+        <mkdir dir="${mbi-app.dir}/jsc"/>
+
+        <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
+                         input="${mbi-app.dir}/js/web/webapp.js"
+                         input.dir="${mbi-app.dir}/js"
+                         output.fn="${out.dir}/web-${mbi-app-ver}.js">
+            <options>
+                <arg line='-f "--closure_entry_point=mbi.web.WebApp"'/>
+                <arg line='-f "--source_map_format=V3"'/>
+                <arg line='-f "--create_source_map=${out.dir}/web-${mbi-app-ver}.js.map"'/>
+                <arg line='-p "${work.dir}/ydn-base/src"'/>
+                <arg line='-p "${work.dir}/ydn-db/src"'/>
+                <arg line='-p "${work.dir}/ydn/src"'/>
+                <arg line='-p "${work.dir}/mbinfo-app-script/js"'/>
+                <arg line='-p "${work.dir}/gdata/src"'/>
+                <arg line='-f "--define=mbi.app.base.DOMAIN_ASSESS=${asset.domain}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MAJOR=${mbi-app-ver-major}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MINOR=${mbi-app-ver-minor}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_PATCH=${mbi-app-ver-patch}"'/>
+                <arg line='-f "--externs=${closure-compiler.dir}/contrib/externs/chrome_extensions.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-base/externs/misc.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-base/externs/browser.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-base/externs/atom.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-base/externs/gapi.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-db/externs/misc.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-db/externs/schema.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-db/externs/websql.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-base/externs/aws.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-base/externs/opensocial.js"'/>
+                <arg line='-f "--externs=${work.dir}/ydn-base/externs/svg.js"'/>
+                <arg line='-f "--externs=${mbi.dir}/externs/misc.js"'/>
+                <arg line='-f "--externs=${mbi.dir}/externs/raphael.js"'/>
+
+                <arg line='-f "--externs=${db-work.dir}/ydn/externs/ydn-server.js"'/>
+                <arg line='-f "--externs=${work.dir}/gdata/externs/gdata.js"'/>
+                <arg line='-f "--output_wrapper=(function(){%output%"'/>
+            </options>
+        </closure-compile>
+        <concat destfile="${out.dir}/web-${mbi-app-ver}.js" append="true">
+            <filelist dir="${mbi-app.dir}" files="meta-data.js"/>
+        </concat>
+        <concat destfile="${out.dir}/web-${mbi-app-ver}.js" append="true">
+            })();app=runApp();
+            //# sourceMappingURL=web-${mbi-app-ver}.js.map
+        </concat>
+        <concat destfile="${out.dir}/web-${mbi-app-ver}.js" append="true">
+            <filelist dir="${mbi-app.dir}/jsc" files="raphael-min-2.1.0.js"/>
+        </concat>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/webapp.js.map"
+                 token="${work.dir}/closure-library/"
+                 value="https://raw.github.com/yathit/google-closure-library/master/"/>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/webapp.js.map"
+                 token="${work.dir}/mbinfo-app-script/"
+                 value="https://raw.github.com/mbikt/mbinfo-app-script/master/"/>
+    </target>
+
+    <target name="inj-raw" description="generates simple compile file">
+        <!--SIMPLE_OPTIMIZATIONS-->
+        <closure-compile compilationlevel="SIMPLE_OPTIMIZATIONS"
+                         base.dir="."
+                         input="${mbi-app.dir}/js/inj/main.js"
+                         output.fn="${mbi-app.dir}/jsc/inj.js"
+                         input.dir="${mbi-app.dir}/js">
+
+            <options>
+                <arg line='-f "--formatting=PRETTY_PRINT"'/>
+                <arg line='-p "${db-work.dir}/ydn-base/src"'/>
+                <arg line='-p "${db-work.dir}/ydn-db/src"'/>
+                <arg line='-p "${db-work.dir}/ydn/src"'/>
+                <arg line='-p "${work.dir}/mbinfo-app-script/js"'/>
+
+                <arg line='-p "${db-work.dir}/gdata/src"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MAJOR=${mbi-app-ver-major}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MINOR=${mbi-app-ver-minor}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_PATCH=${mbi-app-ver-patch}"'/>
+                <arg line='-f "--externs=${closure-compiler.dir}/contrib/externs/chrome_extensions.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/browser.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/atom.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/gapi.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/aws.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/opensocial.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/svg.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn/externs/ydn-server.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/schema.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/websql.js"'/>
+                <arg line='-f "--externs=${mbi.dir}/externs/raphael.js"'/>
+                <arg line='-f "--externs=${mbi.dir}/externs/misc.js"'/>
+
+                <arg line='-f "--externs=${db-work.dir}/gdata/externs/gdata.js"'/>
+                <arg line='-f "--output_wrapper=${outputwrapper.app}"'/>
+            </options>
+        </closure-compile>
+    </target>
+
+    <target name="comp-debug" description="compile JS">
+        <mkdir dir="${mbi-app.dir}/jsc"/>
+
+        <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
+                         input="${mbi-app.dir}/js/admin/admin-app.js"
+                         input.dir="${mbi-app.dir}/js"
+                         output.fn="${out.dir}/${out.fn}">
+            <options>
+                <arg line='-f "--closure_entry_point=mbi.app.AdminApp"'/>
+                <arg line='-f "--source_map_format=V3"'/>
+                <arg line='-f "--create_source_map=${out.dir}/${out.fn}.map"'/>
+                <arg line='-p "${db-work.dir}/ydn-base/src"'/>
+                <arg line='-p "${db-work.dir}/ydn-db/src"'/>
+                <arg line='-p "${db-work.dir}/ydn/src"'/>
+                <arg line='-p "${work.dir}/mbinfo-app-script/js"'/>
+
+                <arg line='-p "${db-work.dir}/gdata/src"'/>
+                <arg line='-f "--define=mbi.app.base.DOMAIN_ASSESS=${asset.domain}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MAJOR=${mbi-app-ver-major}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MINOR=${mbi-app-ver-minor}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_PATCH=${mbi-app-ver-patch}"'/>
+                <arg line='-f "--externs=${closure-compiler.dir}/contrib/externs/chrome_extensions.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/browser.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/atom.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/gapi.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/aws.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/opensocial.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/svg.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn/externs/ydn-server.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/schema.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/websql.js"'/>
+                <arg line='-f "--externs=${mbi.dir}/externs/raphael.js"'/>
+                <arg line='-f "--externs=${mbi.dir}/externs/misc.js"'/>
+
+                <arg line='-f "--externs=${db-work.dir}/gdata/externs/gdata.js"'/>
+                <arg line='-f "--output_wrapper=(function(){%output%"'/>
+
+            </options>
+        </closure-compile>
+        <concat destfile="${out.dir}/${out.fn}" append="true">
+            <filelist dir="${mbi-app.dir}" files="meta-data.js"/>
+        </concat>
+        <concat destfile="${out.dir}/${out.fn}" append="true">
+            })();app=runApp();
+            //# sourceMappingURL=${out.fn}.map
+        </concat>
+        <concat destfile="${out.dir}/${out.fn}" append="true">
+            <filelist dir="${mbi-app.dir}/jsc" files="raphael-min-2.1.0.js"/>
+        </concat>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/${out.fn}.map"
+                 token="${work.dir}/closure-library/"
+                 value="http://localhost/closure-library/"/>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/${out.fn}.map"
+                 token="${db-work.dir}/ydn-db/"
+                 value="http://localhost:8085/ydn-db/"/>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/${out.fn}.map"
+                 token="${work.dir}/mbinfo-app-script/"
+                 value="http://localhost/mbinfo-app-script/"/>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/${out.fn}.map"
+                 token="${work.dir}/mbi-app/"
+                 value="http://localhost/mbi-app/"/>
+    </target>
+
+    <target name="inj-debug" description="compile JS">
+        <mkdir dir="${mbi-app.dir}/jsc"/>
+
+        <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
+                         input="${mbi-app.dir}/js/inj/main.js"
+                         input.dir="${mbi-app.dir}/js"
+                         output.fn="${out.dir}/inj.js">
+            <options>
+                <arg line='-f "--closure_entry_point=mbi.inj.Main"'/>
+                <arg line='-f "--source_map_format=V3"'/>
+                <arg line='-f "--create_source_map=${out.dir}/inj.js.map"'/>
+                <arg line='-p "${db-work.dir}/ydn-base/src"'/>
+                <arg line='-p "${db-work.dir}/ydn-db/src"'/>
+                <arg line='-p "${db-work.dir}/ydn/src"'/>
+                <arg line='-p "${work.dir}/mbinfo-app-script/js"'/>
+
+                <arg line='-p "${db-work.dir}/gdata/src"'/>
+                <arg line='-f "--define=mbi.app.base.DOMAIN_ASSESS=${asset.domain}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MAJOR=${mbi-app-ver-major}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MINOR=${mbi-app-ver-minor}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_PATCH=${mbi-app-ver-patch}"'/>
+                <arg line='-f "--externs=${closure-compiler.dir}/contrib/externs/chrome_extensions.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/browser.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/atom.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/gapi.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/aws.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/opensocial.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/svg.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn/externs/ydn-server.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/schema.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-db/externs/websql.js"'/>
+                <arg line='-f "--externs=${mbi.dir}/externs/raphael.js"'/>
+                <arg line='-f "--externs=${mbi.dir}/externs/misc.js"'/>
+
+                <arg line='-f "--externs=${db-work.dir}/gdata/externs/gdata.js"'/>
+                <arg line='-f "--output_wrapper=${outputwrapper.app}"'/>
+            </options>
+        </closure-compile>
+        <concat destfile="${out.dir}/inj.js" append="true">
+            //# sourceMappingURL=inj.js.map
+        </concat>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/inj.js.map"
+                 token="${work.dir}/closure-library/"
+                 value="http://localhost/google-closure-library/"/>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/inj.js.map"
+                 token="${db-work.dir}/ydn-db/"
+                 value="http://localhost:8085/ydn-db/"/>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/inj.js.map"
+                 token="${work.dir}/mbinfo-app-script/"
+                 value="http://localhost/mbinfo-app-script/"/>
+        <replace description="replace so with online repo path"
+                 file="${out.dir}/inj.js.map"
+                 token="${work.dir}/mbi-app/"
+                 value="http://localhost/mbi-app/"/>
+    </target>
+
+    <target name="bootstrip" description="compile JS">
+        <mkdir dir="${mbi-app.dir}/jsc"/>
+
+        <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
+                         input="${mbi-app.dir}/js/admin/bootstrip.js"
+                         input.dir="${mbi-app.dir}/js"
+                         output.fn="${out.dir}/mbi-app-bootstrip.js">
+            <options>
+                <arg line='-f "--closure_entry_point=mbi.admin.Bootstrip"'/>
+                <arg line='-p "${db-work.dir}/ydn-base/src"'/>
+                <arg line='-p "${db-work.dir}/ydn/src"'/>
+                <arg line='-p "${work.dir}/mbinfo-app-script/js"'/>
+
+                <arg line='-p "${db-work.dir}/gdata/src"'/>
+                <arg line='-f "--externs=${closure-compiler.dir}/contrib/externs/chrome_extensions.js"'/>
+                <arg line='-f "--define=mbi.app.base.DOMAIN_ASSESS=${asset.domain}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MAJOR=${mbi-app-ver-major}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MINOR=${mbi-app-ver-minor}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_PATCH=${mbi-app-ver-patch}"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/browser.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/atom.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/gapi.js"'/>
+                <arg line='-f "--externs=${work.dir}/mbinfo-app-script/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/gdata/externs/gdata.js"'/>
+                <arg line='-f "--output_wrapper=${outputwrapper.app}"'/>
+            </options>
+        </closure-compile>
+    </target>
+    <target name="bootstrip-web" description="compile JS">
+        <closure-compile compilationlevel="ADVANCED_OPTIMIZATIONS"
+                         input="${mbi-app.dir}/js/web/bootstrip.js"
+                         input.dir="${mbi-app.dir}/js"
+                         output.fn="${out.dir}/web-bootstrip.js">
+            <options>
+                <arg line='-f "--closure_entry_point=mbi.web.Bootstrip"'/>
+                <arg line='-p "${db-work.dir}/ydn-base/src"'/>
+                <arg line='-p "${db-work.dir}/ydn/src"'/>
+                <arg line='-f "--externs=${closure-compiler.dir}/contrib/externs/chrome_extensions.js"'/>
+                <arg line='-f "--define=mbi.app.base.DOMAIN_ASSESS=${asset.domain}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MAJOR=${mbi-app-ver-major}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_MINOR=${mbi-app-ver-minor}"'/>
+                <arg line='-f "--define=mbi.app.base.VERSION_PATCH=${mbi-app-ver-patch}"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/misc.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/browser.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/atom.js"'/>
+                <arg line='-f "--externs=${db-work.dir}/ydn-base/externs/gapi.js"'/>
+                <arg line='-f "--externs=${work.dir}/mbinfo-app-script/externs/misc.js"'/>
+                <arg line='-f "--output_wrapper=${outputwrapper.app}"'/>
+            </options>
+        </closure-compile>
+
+    </target>
+
+
+    <macrodef name="calc-deps" description="calculate dependency for testing">
+        <attribute name="output.fn"/>
+        <attribute name="input.dir"/>
+        <attribute name="output-mode" default="deps"/>
+        <element name="calc-options" optional="yes"/>
+        <sequential>
+            <exec executable="python" failonerror="true" logError="true">
+                <arg value="${closure-library.dir}/closure/bin/calcdeps.py"/>
+                <arg line='--dep "${closure-library.dir}"'/>
+                <arg line='--path "@{input.dir}"'/>
+                <arg line='--output_mode "@{output-mode}"'/>
+                <arg line='--output_file "@{output.fn}"'/>
+                <calc-options/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <target name="deps" description="list dependency files">
+        <delete file="${mbi-app.dir}/js/deps.js"/>
+        <calc-deps
+                input.dir="${mbi-app.dir}/js"
+                output.fn="${mbi-app.dir}/js/deps.js">
+        </calc-deps>
+    </target>
+    <target name="push-bootstrip" description="upload bootstrip js files">
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <arg value="-z js"/>
+            <fileset dir="${mbi-app.dir}/jsc">
+                <include name="mbi-app-bootstrip.js"/>
+                <include name="web-bootstrip.js"/>
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/jsc/"/>
+            <targetfile prefix="gs://${asset.bk}/jsc/"/>
+            <identitymapper/>
+        </apply>
+    </target>
+    <target name="push-js" description="upload js files" depends="push-bootstrip">
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <arg value="-z js"/>
+            <fileset dir="${mbi-app.dir}/jsc">
+                <include name="${out.fn}"/>
+                <include name="${out.fn}.map"/>
+                <include name="web-${mbi-app-ver}.js"/>
+                <include name="web-${mbi-app-ver}.js.map"/>
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/jsc/"/>
+            <targetfile prefix="gs://${asset.bk}/jsc/"/>
+            <identitymapper/>
+        </apply>
+        <apply executable="python" verbose="true" relative="yes" parallel="no">
+            <arg value="${gsutil}"/>
+            <arg value="setmeta"/>
+            <arg value="-h"/>
+            <arg value="cache-control: public, max-age=2592000"/>
+            <fileset dir="${mbi-app.dir}/jsc">
+                <include name="${out.fn}"/>
+                <include name="${out.fn}.map"/>
+                <include name="web-${mbi-app-ver}.js"/>
+                <include name="web-${mbi-app-ver}.js.map"/>
+            </fileset>
+            <srcfile prefix="gs://${asset.bk}/jsc/"/>
+        </apply>
+    </target>
+    <target name="push-css" description="upload css files">
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <arg value="-z css"/>
+            <fileset dir="${mbi-app.dir}/css">
+                <include name="common.css"/>
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/css/"/>
+            <targetfile prefix="gs://${html.bk}/css/"/>
+            <identitymapper/>
+        </apply>
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="setmeta"/>
+            <arg value="-h"/>
+            <arg value="cache-control: public, max-age=600"/>
+            <fileset dir="${mbi-app.dir}/css">
+                <include name="common.css"/>
+            </fileset>
+            <srcfile prefix="gs://${html.bk}/css/"/>
+        </apply>
+    </target>
+    <target name="push-img" description="upload image files">
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <arg value="-z png"/>
+            <fileset dir="${mbi-app.dir}/image/img-nav" includes="*">
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/image/img-nav/"/>
+            <targetfile prefix="gs://${asset.bk}/image/img-nav/"/>
+            <identitymapper/>
+        </apply>
+        <apply executable="echo" verbose="true" relative="yes" parallel="no">
+            <arg value="${gsutil}"/>
+            <arg value="setmeta"/>
+            <arg value="-h"/>
+            <arg value="cache-control: public, max-age=2592000"/>
+            <fileset dir="${mbi-app.dir}/image/img-nav" includes="*">
+            </fileset>
+            <srcfile prefix="gs://${asset.bk}/image/img-nav/"/>
+        </apply>
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <fileset dir="${mbi-app.dir}/images">
+                <include name="*"/>
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/images/"/>
+            <targetfile prefix="gs://static.mechanobio.info/gadgets/images/"/>
+            <identitymapper/>
+        </apply>
+    </target>
+    <target name="push-html" description="upload html files to static web site">
+        <echo>gsutil cp index.html gs://${html.bk}/</echo>
+        <echo>gsutil cp html-index-dev.html gs://test-1.mechanobio.info/index.html</echo>
+        <apply executable="echo" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <filelist dir="${mbi-app.dir}">
+                <file name="index.html"/>
+            </filelist>
+            <srcfile prefix="${mbi-app.dir}/"/>
+            <targetfile prefix="gs://${html.bk}/"/>
+            <identitymapper/>
+        </apply>
+
+    </target>
+    <target name="push-gadget-html" description="upload html files">
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <arg value="-z html"/>
+            <fileset dir="${mbi-app.dir}/html">
+                <include name="combo.html"/>
+                <include name="protein-domain.html"/>
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/html/"/>
+            <targetfile prefix="gs://static.mechanobio.info/gadgets/domain/"/>
+            <identitymapper/>
+        </apply>
+    </target>
+    <target name="push-test" description="upload gadget live test files">
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <arg value="-z js"/>
+            <fileset dir="${mbi-app.dir}/jsc">
+                <include name="domain.js"/>
+                <include name="combo.js"/>
+                <include name="combo.js.map"/>
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/jsc/"/>
+            <targetfile prefix="gs://mbi-test/gadgets/jsc/"/>
+            <identitymapper/>
+        </apply>
+
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <arg value="-z html"/>
+            <fileset dir="${mbi-app.dir}/html">
+                <include name="combo.html"/>
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/html/"/>
+            <targetfile prefix="gs://mbi-test/gadgets/domain/"/>
+            <identitymapper/>
+        </apply>
+
+        <apply executable="python" relative="yes">
+            <arg value="${gsutil}"/>
+            <arg value="cp"/>
+            <arg value="-z css"/>
+            <fileset dir="${mbi-app.dir}/css">
+                <include name="combo.css"/>
+            </fileset>
+            <srcfile prefix="${mbi-app.dir}/css/"/>
+            <targetfile prefix="gs://mbi-test/gadgets/css/"/>
+            <identitymapper/>
+        </apply>
+        <!--
+ <apply executable="python" relative="yes">
+  <arg value="${gsutil}"/>
+  <arg value="cp"/>
+  <fileset dir="${mbi-app.dir}/images">
+      <include name="*"/>
+  </fileset>
+  <srcfile prefix="${mbi-app.dir}/images/"/>
+  <targetfile prefix="gs://mbi-test/gadgets/images/"/>
+  <identitymapper/>
+ </apply>
+
+      -->
+    </target>
+    <target name="crx" description="prepare crx folder">
+        <sequential>
+            <replaceregexp file="${publish.dir}/extension/manifest.json"
+                           match='"version": ".+"'
+                           replace='"version": "${mbi-app-ver}"'
+                    />
+
+            <copy todir="${publish.dir}/extension">
+                <fileset dir="${mbi-app.dir}/gss">
+                    <include name="inj.css"/>
+                    <include name="goog.css"/>
+                </fileset>
+                <fileset dir="${mbi-app.dir}/jsc">
+                    <include name="inj.js"/>
+                    <include name="inj.js.map"/>
+                </fileset>
+            </copy>
+            <zip destfile="${publish.dir}/extension.zip" basedir="${publish.dir}/extension"></zip>
+            <echo>Published to ${publish.dir}/extension.zip</echo>
+        </sequential>
+
+    </target>
+    <target name="push" description="upload distribution"
+            depends="push-js,push-css,push-bootstrip">
+
+    </target>
+    <target name="templ" description="compile templates">
+
+
+        <fileset dir="${mbi-app.dir}/templ" id="templ.files">
+            <include name="**/*.soy"/>
+        </fileset>
+        <pathconvert pathsep="' '"  property="templfiles" refid="templ.files" dirsep="/">
+            <map from="${mbi-app.dir}/templ/" to=""/>
+        </pathconvert>
+        <generate-wedget-template filename="${templfiles}"
+                                  input.dir="${templ.dir}"
+                                  output.dir="${mbi-app.dir}/js/templ/">
+
+        </generate-wedget-template>
+
+    </target>
+
+    <target name="goog-css" description="cancat css files for closure ui">
+        <sequential>
+            <concat destfile="${mbi-app.dir}/gss/goog.css">
+                <header filtering="no" trimleading="yes">
+                    /*
+                     * Closure Library CSS
+                     */
+                </header>
+                <filelist dir="${closure-library.dir}/closure/goog/css">
+                    <file name="autocomplete.css"/>
+                    <file name="common.css"/>
+                    <file name="combobox.css"/>
+                    <file name="menu.css"/>
+                    <file name="menubar.css"/>
+                    <file name="menuitem.css"/>
+                    <file name="menubutton.css"/>
+                    <file name="menuseparator.css"/>
+                    <file name="submenu.css"/>
+                    <file name="dialog.css"/>
+                    <file name="tree.css"/>
+                </filelist>
+            </concat>
+            <replace description="fix relative path to work in extension"
+                     file="${mbi-app.dir}/gss/goog.css"
+                     token="//ssl.gstatic.com/"
+                     value="https://ssl.gstatic.com/"/>
+        </sequential>
+    </target>
+    <target name="css-featured" description="concat css for desktop">
+        <concat destfile="${css.dir}/mbi-app-${mbi-app-ver}-featured.css" >
+            <fileset dir="${work.dir}/mbinfo-app-script/css/"
+                     includes="interaction.css,linkout.css,domain.css,protein-card.css,pubmed.css"/>
+            <fileset dir="${gss.dir}"
+                     includes="base.css,breadcrumb.css,figure.css,fonts.css,goog.css,img-orb-nav.css,wiki.css,theme/featured.css" />
+        </concat>
+    </target>
+    <target name="css-simplicity" description="concat css for simplicity">
+        <concat destfile="${css.dir}/mbi-app-${mbi-app-ver}-simplicity.css" >
+            <fileset dir="${work.dir}/mbinfo-app-script/css/"
+                     includes="interaction.css,linkout.css,domain.css,protein-card.css,pubmed.css"/>
+            <fileset dir="${gss.dir}"
+                     includes="base.css,breadcrumb.css,figure.css,fonts.css,goog.css,wiki.css,theme/simplicity.css"/>
+        </concat>
+    </target>
+    <target name="css" description="compile all css">
+        <concat destfile="${css.dir}/common.css" >
+            <fileset dir="${work.dir}/mbinfo-app-script/css/"
+                     includes="base.css,interaction.css,linkout.css,domain.css,protein-card.css,pubmed.css"/>
+            <fileset dir="${gss.dir}"
+                     includes="base.css,we-are-hiring.css,breadcrumb.css,figure.css,fonts.css,goog.css,wiki.css,img-orb-nav.css,theme/simplicity.css,theme/featured.css"/>
+        </concat>
+        <replace file="${css.dir}/common.css"
+                       token='$version'
+                       value='${mbi-app-ver}'
+                />
+    </target>
+
+    <target name="concat-csv"
+            description="concat csv files from Downloads folder">
+        <concat destfile="${data.dir}/protein-domains.csv" >
+            <fileset dir="~/Downloads"
+                     includes="*.csv"/>
+        </concat>
+    </target>
+
+
+    <target name="app-dev-html"
+            description="Generate HTML from soy template">
+        <gen-soy-web output.fn="${mbi-app.dir}/app-dev.html"
+                     namespace="templ.mbi.app.adminapp.index"
+                     soy-map-data="is_raw=true,is_app=true,version=${mbi-app-ver}"
+                     templ.dir="${templ.dir}">
+            <soy-web-optionls>
+                <arg value="--force=true"/>
+                <arg value="--notidy=true"/>
+            </soy-web-optionls>
+        </gen-soy-web>
+    </target>
+    <target name="app-html"
+            description="Generate HTML from soy template">
+        <mkdir dir="${publish.dir}"/>
+        <gen-soy-web output.fn="${publish.dir}/extension/app.html"
+                     namespace="templ.mbi.app.adminapp.index"
+                     soy-map-data="is_app=true,version=${mbi-app-ver}"
+                     templ.dir="${templ.dir}">
+            <soy-web-optionls>
+                <arg value="--force=true"/>
+                <arg value="--notidy=true"/>
+            </soy-web-optionls>
+        </gen-soy-web>
+    </target>
+    <target name="cgi"
+            description="Generate HTML from soy template">
+        <gen-soy-web output.fn="${mbi-app.dir}/cgi.html"
+                     namespace="templ.mbi.web.html.index"
+                     soy-map-data="htmlFile=index,version=${mbi-app-ver},assess_domain=${asset.domain-unquote}"
+                     templ.dir="${templ.dir}">
+            <soy-web-optionls>
+                <arg value="--force=true"/>
+                <arg value="--notidy=true"/>
+            </soy-web-optionls>
+
+        </gen-soy-web>
+        <echo>
+            gsutil cp ./cgi.html gs://${html.bk}/cgi
+        </echo>
+    </target>
+
+    <target name="cgi-dev"
+            description="Generate HTML from soy template">
+
+        <gen-soy-web output.fn="${mbi-app.dir}/cgi.html"
+                     namespace="templ.mbi.web.html.index"
+                     soy-map-data="is_raw=true,htmlFile=index,version=${mbi-app-ver}"
+                     templ.dir="${templ.dir}">
+            <soy-web-optionls>
+                <arg value="--force=true"/>
+                <arg value="--notidy=true"/>
+            </soy-web-optionls>
+        </gen-soy-web>
+        <echo>
+            gsutil cp ./cgi.html gs://mbinfo-wiki-3/cgi
+        </echo>
+    </target>
+
+    <target name="build" description="build all distribution"
+            depends="css,templ,app-html,app-html,cgi,comp-debug,webapp-debug,inj-debug,bootstrip,bootstrip-web,crx">
+
+    </target>
+</project>

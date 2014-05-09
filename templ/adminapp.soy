@@ -1,0 +1,270 @@
+{namespace templ.mbi.app.adminapp}
+
+
+/*
+ * Template for admin app.
+ */
+
+
+/**
+ * Toolbar
+ */
+{template .toolbar}
+ <div class="toolbar" id="wiki-edit-toolbar">
+   <button name="normalize" title="Normalize wiki HTML content" style="display: none">Clean HTML</button>
+   <button name="render" title="Render content into new window">Preview</button>
+   <button name="publish" title="Publish the page to static site">Publish</button>
+   <button name="save" title="Save to Google Site content" style="display: none">Save</button>
+   <a name="view" id="toolbar-view" target="_blank" title="View static web page">View</a>
+ </div>
+{/template}
+
+
+/**
+*
+*
+* @param img_src var
+* @param title var
+* @param rows var
+*/
+{template .figureSection}
+
+	<img src="{$img_src|noAutoescape}" alt="{$title}" />
+
+	<h3>Summary</h3>
+
+	<table cellpadding="2">
+	<tbody>
+	{for $i in range(0, length($rows))}
+	<tr>
+		<td>
+			{$rows[$i].key|noAutoescape}
+		</td>
+		<td>
+			{$rows[$i].value|noAutoescape}
+		</td>
+	</tr>
+	{/for}
+	</tbody>
+	</table>
+
+	<div class="copyright-box">
+		<div class="copyright-icon">
+			<span class="copyright-char">
+	            &#169; /** &copy; */
+			</span>
+		</div>
+		<div>
+			This image is under <b>copyright </b>to the National University of Singapore.{sp}
+			<b>Any other uses of this image without written consent might be copyright infringement.</b>
+		</div>
+	</div>
+
+{/template}
+
+/**
+ * Body HTML.
+ * @param theme
+ */
+{template .sidebar}
+<section class="sidebar">
+     <div class="sidebar-top">
+       <div class="logo" style="display: none">
+          <img src="https://mbinfo.storage.googleapis.com/image/mbinfo-logo.png"
+           alt="MBInfo logo"/>
+       </div>
+       <div id="image-nav">
+       </div>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-bottom-scroller">
+        <div role="navigation" id="breadcrumb-peer" class="menu-box">
+        </div>
+        {call templ.mbi.app.topicDefinitionPanel/}
+        {if $theme == 'simplicity'}
+            <div id="rightbar">
+               <div id="relevant-panel" style="display: none">
+               </div>
+
+               <div id="protein-infobox">
+               </div>
+            </div>
+        {/if}
+        <div class="user-toolbar">
+            <div>
+              <a id="user-login">...</a>
+            </div>
+            <div>
+              <span id="user-name" style="display: none;"></span>
+            </div>
+        </div>
+        {call templ.mbi.app.tools data="all" /}
+      </div>
+   </div>
+ </section>
+{/template}
+
+/**
+ * Body HTML.
+ * @param theme theme name.
+ */
+{template .body}
+<div id="body-content">  <div>
+  <div id="banner">
+       <div class="left">
+         <a href="#" id="home-link">
+
+         </a>
+         <div class="tools" style="display: none">
+           <ul class="banner-menu-bar">
+              <li>
+                  <div>
+                     <a href="http://www.mechanobio.info">Home</a>
+                  </div>
+              </li>
+           </ul>
+         </div>
+       </div>
+       <div class="right">
+           <input type="text" placeholder="Search MBInfo" width="8em" id="search-input"/>
+       </div>
+   </div>
+   <div class="adminapp">
+
+     {call .sidebar data="all"/}
+     <div id="main-panel">
+
+       <div id="main-panel-topbar">
+          <div id="breadcrumb"></div>
+       </div>
+       <div id="main-panel-content">
+         <section class="content" id="section-content">
+           <div id="content-toolbar">
+             {call .toolbar /}
+           </div>
+           <div id="content-main">
+             {call templ.mbi.app.rightbar data="all"/}
+             <div id="wiki-content" class="wiki-content">
+
+             </div>
+           </div>
+         </section>
+         <section id="section-home">
+
+         </section>
+         <section class="figure" id="section-figure">
+         </section>
+         <section  id="section-sitemap">
+         </section>
+         <section id="section-figure-list">
+         </section>
+         <section id="section-setting">
+           {call templ.mbi.app.setting data="all" /}
+         </section>
+       </div>
+      </div>
+
+   </div>
+   <div id="status-panel">
+     <div id="feed" class="feed" style="display: none">
+     </div>
+     <div id="status-bar">
+       <div id="status-bar-content"></div>
+     </div>
+   </div>
+</div></div>
+{/template}
+
+
+/**
+* Home page
+* @param is_raw raw or not
+*/
+{template .index}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>MBInfo Admin App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {if $is_raw}
+    <script type="text/javascript" src="https://mbinfo.storage.googleapis.com/jsc/raphael-min-2.1.0.js"></script>
+    <script type="text/javascript" src="http://localhost/mbi-app/meta-data.js"></script>
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/fonts.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/base.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/wiki.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/img-orb-nav.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/figure.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/goog.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/breadcrumb.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/base.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/domain.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/interaction.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/linkout.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/protein-card.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbinfo-app-script/css/pubmed.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/theme/simplicity.css">
+      <link rel="stylesheet" type="text/css" href="http://localhost/mbi-app/gss/theme/featured.css">
+      <script type="text/javascript" src="http://localhost/closure-library/closure/goog/base.js"></script>
+      <script  type="text/javascript" src="http://localhost:8085/ydn-base/src/deps.js"></script>
+      <script  type="text/javascript" src="http://localhost:8085/ydn/src/deps.js"></script>
+      <script  type="text/javascript" src="http://localhost:8085/ydn-db/src/deps.js"></script>
+      <script  type="text/javascript" src="http://localhost:8085/ydn-db-sync/src/deps.js"></script>
+      <script  type="text/javascript" src="http://localhost:8085/gdata/src/deps.js"></script>
+      <script  type="text/javascript" src="http://localhost/mbinfo-app-script/js/deps.js"></script>
+      <script  type="text/javascript" src="http://localhost/mbinfo-wiki/js/deps.js"></script>
+      <script type="text/javascript" src="http://localhost/mbi-app/js/deps.js"></script>
+      <script type="text/javascript" src="http://localhost/mbi-app/js/admin/include.js"></script>
+    {else}
+      <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/www.mechanobio.info/css/common.css">
+      <script type="text/javascript" src="https://mbinfo.storage.googleapis.com/jsc/mbi-app-bootstrip.js"></script>
+    {/if}
+</head>
+<body>
+    <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+
+  {if $is_raw}
+      <script type="text/javascript" src="http://localhost/mbi-app/js/admin/main.js"></script>
+  {/if}
+</body>
+</html>
+
+{/template}
+
+
+
+/**
+ * User setting
+ */
+{template .gdrivePanel}
+<div class="gdrive-panel">
+  <details><summary>Publish from Google Drive to Static web site</summary>
+    <ul>
+    </ul>
+  </details>
+
+</div>
+{/template}
+
+
+/**
+ * User setting
+ */
+{template .siteMapPage}
+<div class="sitemap">
+  <div name="sitemap-tree">
+  </div>
+  <div class="admin-tool">
+    <button name="module" title="Update functional module matrix from spreadsheet">Update module matrix</button>
+    <button name="sitemap" title="Update sitemap and sitemaps.xml.">Update sitemap</button>
+    <button name="redirect" title="Manual update on server-side required. This will just dump the data on console.">Update redirect url</button>
+    <details><summary>Advanced</summary>
+      <button name="update" title="Invalidate all Google Site page content cached in this app. Instead of this, you should better report the problem to Kyaw.">
+        Validate Google Site cache
+      </button>
+      <span name="message"></span>
+    </details>
+  </div>
+</div>
+{/template}

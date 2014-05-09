@@ -1,0 +1,93 @@
+
+
+.status-bar {
+    /* color: #666; */
+    font-size: 11px;
+    padding-left: 8px;
+    line-height: 1.2em;
+}
+
+.status-bar ul {
+    margin: 0;
+    padding: 0;
+    margin-top: 41px;
+    background-color: white;
+}
+
+.select-figure {
+    overflow: scroll;
+    max-height: 20em;
+}
+
+#mbi-mebubar {
+    display: inline-block;
+}
+
+.goog-menu-button {
+    /* shouldn't be necessary, but somehow it does work in content script evn */
+    min-width: 3em;
+}
+
+.annotate-dialog label {
+    min-width: 8em;
+}
+
+
+
+
+/* Standard styling for goog.ui.Dialog.
+ *
+ * @author ssaviano@google.com (Steven Saviano)
+ * @author attila@google.com (Attila Bodis)
+ */
+
+
+.modal-dialog {
+  background: #c1d9ff;
+  border: 1px solid #3a5774;
+  color: #000;
+  padding: 4px;
+  position: absolute;
+}
+
+.modal-dialog a,
+.modal-dialog a:link,
+.modal-dialog a:visited  {
+    color: #06c;
+    cursor: pointer;
+}
+
+.modal-dialog-bg {
+    background: #666;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+
+.modal-dialog-title {
+    background: #e0edfe;
+    color: #000;
+    cursor: pointer;
+    font-size: 120%;
+    font-weight: bold;
+
+    /* Add padding on the right to ensure the close button has room. */
+    padding: 8px 31px 8px 8px;
+
+    position: relative;
+    _zoom: 1; /* Ensures proper width in IE6 RTL. */
+}
+
+.modal-dialog-title-close {
+
+}
+
+.modal-dialog-buttons,
+.modal-dialog-content {
+    background-color: #fff;
+    padding: 8px;
+}
+
+.goog-buttonset-default {
+    font-weight: bold;
+}

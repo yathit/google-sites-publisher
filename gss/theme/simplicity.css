@@ -1,0 +1,45 @@
+/** Full featured theme
+ * This is default theme
+ */
+
+
+body.simplicity .logo {
+    width: 18em;
+}
+
+body.simplicity .logo img {
+    width: 18em;
+}
+
+body.simplicity section.content {
+
+}
+
+
+body.simplicity section.sidebar {
+    font-size: 90%;
+}
+
+body.simplicity #protein-infobox {
+    width: 16em;
+    margin: 8px 0;
+    font-size: 111%;
+}
+
+
+body.simplicity .infobox {
+    width: 16em;
+    margin: 0;
+}
+
+body.simplicity #wiki-content {
+
+}
+
+body.simplicity #image-nav {
+    display: none;
+}
+
+body.simplicity #orb-nav {
+    display: none;
+}

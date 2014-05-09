@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../../../css/base.css">
+    <link rel="stylesheet" type="text/css" href="../../../../closure-library/closure/goog/css/tree.css">
+    <title>Sitemap test</title>
+    <script type="text/javascript" src="../../../../closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript" src="../../../../ydn-base/js/deps.js"></script>
+    <script type="text/javascript" src="../../../../ydn/js/deps.js"></script>
+    <script type="text/javascript" src="../../deps.js"></script>
+    <script type="text/javascript">
+        goog.require("mbi.data.SiteMap");
+        goog.require('goog.testing.jsunit');
+    </script>
+
+</head>
+<body>
+<div>some text</div>
+<div id="content">
+<div id="sitemap"></div>
+</div>
+<script type="text/javascript">
+  var map = {"url": "a", "children": [{
+      "url": "aa", "children": []
+  }, {
+      "url": "ab", "children": [{
+          "url": "abc",
+          "children": []
+      }]
+  }, {
+      "url": "ac", "children": []
+  }]};
+  var sitemap = mbi.data.SiteMap.fromJSON(map);
+  var testWalk = function() {
+      var result = [];
+      var last = sitemap.walk('aa', result);
+      // console.log(result);
+      assertEquals('last node', 'aa', last.url);
+      assertEquals('result', 2, result.length);
+  };
+  var testWalkNoNode = function() {
+      var result = [];
+      var last = sitemap.walk('ad', result);
+      assertNull('last node', last);
+      assertEquals('result', 0, result.length);
+  };
+  var testWalk2 = function() {
+      var result = [];
+      var last = sitemap.walk('abc', result);
+      // console.log(result);
+      assertEquals('last node', 'abc', last.url);
+      assertEquals('result', 3, result.length);
+      assertEquals('first array node', 'a', result[0].url);
+      assertEquals('last array node', 'abc', result[2].url);
+  };
+</script>
+</body>
+</html>

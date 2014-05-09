@@ -1,0 +1,472 @@
+
+/* version: $version */
+
+body {
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+}
+
+img {
+    border:none;
+}
+
+
+#home-link {
+    display: block;
+    min-height: 120px;
+    min-width: 300px;
+}
+
+#body-content {  /* all body content go here */
+    background-color: lightgrey;
+    background-repeat: repeat-y, repeat-y;
+    background-position: center center;
+}
+
+#body-content > div {    /* wrap to center content-body */
+    width: 100%;
+    max-width: 1100px;
+    min-width: 1100px;
+    min-height: 800px;
+    margin: 0 auto;
+    height: 100%;
+    position: relative;
+    background-color: white;
+    box-shadow: 1px 1px 10px #333;
+}
+
+
+section.sidebar {
+    width: 200px;
+    padding: 24px 4px 4px 4px;
+    background-color: #F6F6F6;
+    position: absolute;
+    top: 146px;
+    bottom: 0;
+    left: 0;
+}
+
+.adminapp {
+    margin-bottom: 24px;
+    overflow-y: hidden;
+
+}
+
+.sidebar-top {
+    z-index: 10;
+    height: 200px;
+
+}
+
+.sidebar-bottom {
+    padding: 4px 2px 4px 8px;
+    position: absolute;
+    top: 224px;
+    bottom: 24px;
+    left: 0;
+    width: 200px;
+}
+
+.sidebar-bottom-scroller {
+
+}
+
+
+#main-panel {
+    margin-left: 208px;
+}
+
+
+#main-panel-topbar {
+    opacity: 1;
+    background: white;
+    padding-bottom: 0.25em;
+    z-index: 100;
+    height: 26px;
+}
+
+#main-panel-content {
+
+}
+
+section.content {
+
+}
+
+.wiki-content {
+    margin-left: 8px;
+}
+
+.logo {
+
+}
+
+.logo a {
+    text-decoration: none;
+}
+
+.logo a:hover {
+    text-decoration: none;
+    cursor: default;
+}
+
+
+
+.menu_bar {
+    padding: 4px 8px 8px 24px;
+    border-bottom: 1px solid #ebebeb;
+    overflow: hidden;
+}
+
+.menu_bar ul {
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    height: 20px;
+}
+
+.menu_bar ul li {
+    padding: 4px;
+    list-style: none;
+    display: inline;
+}
+
+.left {
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.right {
+    float: right;
+    display: inline;
+}
+
+.center {
+    float: none;
+    display: table-cell;
+}
+
+.empty {
+    display: none;
+}
+
+.reading header.sidebar {
+    display: none;
+}
+
+footer {
+    padding: 1em 4px;
+    clear:both;
+    font-size: 0.8em;
+    margin-left: 208px;
+    border-top: thin solid lightblue;
+}
+
+.reading footer {
+    display: none;
+}
+
+footer > div.left {
+    float: left;
+    width: 100px;
+    height: 3em;
+}
+
+footer > div.right {
+    float: right;
+    width: 100px;
+    height: 3em;
+    text-align: right;
+}
+
+footer > div.center {
+    margin:0 auto;
+    width: 80%;
+}
+
+footer .license {
+    text-align: center;
+    vertical-align: top;
+}
+
+footer .license span {
+    vertical-align: top;
+}
+
+footer .menu-block {
+    text-align: center;
+}
+
+footer .menu {
+    margin: 0;
+    padding: 0;
+}
+
+footer .menu li {
+    list-style: none;
+    display: inline;
+    font-size: 9px;
+    margin-left: 0;
+    padding: 0 2px;
+}
+
+footer .menu li ~ li {
+    border-left: 1px solid #999;
+}
+
+footer .menu li a {
+    color: #999;
+}
+
+
+.cc-by-nc {
+    min-width: 85px;
+    min-height: 15px;
+    background: url("//www.mechanobio.info/image/home/cc-by-nc.png") no-repeat;
+    display: inline-block;
+}
+
+
+.license a {
+    vertical-align: top;
+    color: black;
+}
+
+div > #all-logos {
+    margin: 16px 4px;
+}
+
+#all-logos {
+    min-width: 446px;
+    min-height: 42px;
+    background: url("//www.mechanobio.info/image/home/all-logo.png") no-repeat center;
+    text-align: center;
+}
+
+.user-toolbar {
+
+}
+
+.login-bar > div {
+    display: inline-block;
+    padding-right: 4px;
+}
+
+.login-bar .login {
+    display: none;
+}
+
+.login-bar:hover .login {
+    display: inherit;
+}
+
+.tools {
+
+}
+
+.tools ul {
+    padding-left: 0;
+}
+
+.tools ul li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tools a {
+    text-decoration: none;
+}
+
+#banner {
+    height: 146px;
+    background-image: url("//www.mechanobio.info/image/home/banner.jpg");
+}
+
+/*
+#banner .tools {
+    position: absolute;
+    bottom: 3px;
+    width: 100%;
+    margin-left: 30px;
+}
+
+#banner .tools ul {
+    margin: 0 auto;
+}
+
+
+#banner .banner-menu-bar li {
+    border: white thin solid;
+    max-width: 3em;
+    min-width: 3em;
+}
+
+#banner .banner-menu-bar li div {
+
+}
+
+#banner .banner-menu-bar li a {
+    color: white;
+    margin: 0 auto;
+}
+*/
+
+.setting-toolbar {
+    margin: 4px;
+}
+
+.setting label {
+    display: inline-block;
+    width: 5em;
+}
+
+#content-toolbar {
+    background-color: white;
+    padding-bottom: 8px;
+    padding-left: 8px;
+}
+
+#content-main {
+    margin-top: 16px;
+}
+
+
+.sidebar #feed {
+    border-left: thin solid #808080;
+    padding-left: 2px;
+}
+
+.sidebar #feed ul li {
+    height: 1.6em;
+    overflow: hidden;
+}
+
+
+.sidebar #feed ul li span {
+    background-color: #F6F6F6;
+}
+
+.sidebar #feed ul li:hover {
+    z-index: 100;
+    width: 100em;
+}
+
+.admin-tool {
+    display: none;
+}
+
+.adminapp .admin-tool {
+    display: inherit;
+}
+
+.admin-tool button {
+    padding-left: 8px;
+}
+
+.history {
+    clear:both;
+    padding: 8px;
+}
+
+.history > div {
+    overflow-y: hidden;
+}
+
+
+#references {
+    padding-top: 8px;
+    clear: both;
+}
+
+#status-bar {
+    right: 0;
+    left: 0;
+    clear: both;
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
+    height: 14px;
+    overflow: hidden;
+    border: solid thin #d3d3d3;
+    border-top: solid thin #ffffff;
+    background: #d3d3d3;
+    padding: 4px 2px;
+    margin: 0;
+    font-size: small;
+
+}
+
+#status-bar ul {
+    margin: 0;
+    padding: 0;
+}
+
+#status-bar-content span {
+    padding: 0 2px;
+}
+
+
+
+.goog-scrollfloater {
+
+}
+
+
+.infobox-scroller {
+
+}
+
+/* CSS from google sites, todo: move to seperate file */
+.align-center-wrapping-off, .sites-embed-align-center-wrapping-off  {
+    display: block;
+    clear: both;
+    text-align: center;
+    margin: 5px auto;
+}
+
+.sites-embed {
+    margin: 5px auto 0;
+}
+.sites-embed-content {
+    text-align: left;
+}
+
+#term-definition-panel .definition {
+    background-color: white;
+    margin: 2px 6px 2px 2px;
+    border-radius: 5px;
+}
+
+#breadcrumb {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+.sitemap .admin-tool {
+    margin: 16px 0;
+}
+
+#banner .right {
+    text-align: right;
+    padding-right: 8px;
+}
+
+#banner .login-bar {
+    color: white;
+    font-size: 90%;
+    margin-top: 8px;
+}
+
+#banner .login-bar a {
+    text-decoration: none;
+    color: white;
+}
+
+#banner .bottom {
+    margin-top: 90px; /* cheating ? */
+}
+

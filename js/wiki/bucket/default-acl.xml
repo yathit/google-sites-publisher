@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<AccessControlList>
+<Entries>
+    <Entry>
+        <Scope type="AllUsers"/>
+        <Permission>
+            READ
+        </Permission>
+    </Entry>
+
+    <Entry>
+        <Scope type="UserByEmail">
+            <EmailAddress>
+                mbinfo-backend@appspot.gserviceaccount.com
+            </EmailAddress>
+        </Scope>
+        <Permission>
+            FULL_CONTROL
+        </Permission>
+    </Entry>
+</Entries>
+</AccessControlList>
