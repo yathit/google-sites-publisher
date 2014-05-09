@@ -3,7 +3,7 @@
 Configuration
 -------------
 
-Hardcoded application setting, like bucket name, site name are defined in
+Application constant and basic data, like bucket name, site name, common texts are defined in
 `js/admin/base.js`, `meta-data.js` and `js/data/data.js` files. Change them as necessary. Detail information about them are explained in the file itself.
 
 Compiling bioinformatic data
