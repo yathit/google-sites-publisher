@@ -295,11 +295,11 @@
             <filelist dir="${mbi-app.dir}/jsc" files="raphael-min-2.1.0.js"/>
         </concat>
         <replace description="replace so with online repo path"
-                 file="${out.dir}/webapp.js.map"
+                 file="${out.dir}/web-${mbi-app-ver}.js.map"
                  token="${work.dir}/closure-library/"
                  value="https://raw.github.com/yathit/google-closure-library/master/"/>
         <replace description="replace so with online repo path"
-                 file="${out.dir}/webapp.js.map"
+                 file="${out.dir}/web-${mbi-app-ver}.js.map"
                  token="${work.dir}/mbinfo-app-script/"
                  value="https://raw.github.com/mbikt/mbinfo-app-script/master/"/>
     </target>
