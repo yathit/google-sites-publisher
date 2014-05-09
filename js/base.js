@@ -95,6 +95,7 @@ mbi.app.base.SITE_DOMAIN = !COMPILED ?
 
 
 /**
+ * Google Site page id for root topic page.
  * @const
  * @type {string}
  */
