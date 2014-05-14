@@ -44,14 +44,14 @@ mbi.app.base.PREVIOUS_STABLE = '1.6.0';
  * @const
  * @type {string}
  */
-mbi.app.base.VERSION_STABLE = '1.6.0';
+mbi.app.base.VERSION_STABLE = '1.6.2';
 
 
 /**
  * @const
  * @type {string}
  */
-mbi.app.base.VERSION_BETA = '1.6.1';
+mbi.app.base.VERSION_BETA = '1.6.2';
 
 
 /**
