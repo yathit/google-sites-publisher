@@ -1,5 +1,7 @@
 # MBInfo Chrome Extension and web app
 
+This project include [MBInfo Chrome Extension](https://chrome.google.com/webstore/detail/mbinfo-wiki-editor/fcojbcccmkgamiifkdkkcplcjniiemmj) and javascript web app for [MBINfo web site](http://www.mechanobio.info). See specific description on [admin](admin/readme.md) and [web](web/readme.md) folder.
+
 Configuration
 -------------
 
