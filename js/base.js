@@ -44,14 +44,14 @@ mbi.app.base.PREVIOUS_STABLE = '1.6.0';
  * @const
  * @type {string}
  */
-mbi.app.base.VERSION_STABLE = '1.6.2';
+mbi.app.base.VERSION_STABLE = '1.6.6';
 
 
 /**
  * @const
  * @type {string}
  */
-mbi.app.base.VERSION_BETA = '1.6.2';
+mbi.app.base.VERSION_BETA = '1.6.6';
 
 
 /**
@@ -81,6 +81,8 @@ mbi.app.base.SITE_DOMAIN = !COMPILED ?
 
 /**
  * Google Site page id for root topic page.
+ * You can get page id by visiting
+ * https://sites.google.com/feeds/content/mechanobio.info/mbinfo_go_2013?path=/what-is&alt=json
  * @const
  * @type {string}
  */
@@ -101,6 +103,13 @@ mbi.app.base.MODULE_PAGE_ID = COMPILED ? '4708536903788348319' :
  * @type {string}
  */
 mbi.app.base.HELP_PAGE_ID = '5042300758476241393';
+
+
+/**
+ * @const
+ * @type {string}
+ */
+mbi.app.base.WHAT_IS_PAGE_ID = '3684904852187157660';
 
 
 /**
@@ -378,6 +387,14 @@ mbi.app.base.SITEMAP_MODULE_URL =
  */
 mbi.app.base.SITEMAP_HELP_URL =
     mbi.app.base.buildSitemapCacheUrl(mbi.app.base.HELP_PAGE_ID);
+
+
+/**
+ * @const
+ * @type {string} Url for topic sitemap JSON data.
+ */
+mbi.app.base.WHAT_IS_URL =
+    mbi.app.base.buildSitemapCacheUrl(mbi.app.base.WHAT_IS_PAGE_ID);
 
 
 /**

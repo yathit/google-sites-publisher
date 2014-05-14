@@ -73,6 +73,14 @@ mbi.app.shared.help_map = null;
  * This value is set by mbi.app.AdminApp and used in mbi.wiki.HtmlRenderer.
  * @type {mbi.data.SiteMap}
  */
+mbi.app.shared.what_is_map = null;
+
+
+/**
+ * Site map object for wiki.
+ * This value is set by mbi.app.AdminApp and used in mbi.wiki.HtmlRenderer.
+ * @type {mbi.data.SiteMap}
+ */
 mbi.app.shared.home_map = null;
 
 
@@ -191,6 +199,13 @@ mbi.app.shared.sitemap_help_df_;
  * @type {!goog.async.Deferred}
  * @private
  */
+mbi.app.shared.what_is_df_;
+
+
+/**
+ * @type {!goog.async.Deferred}
+ * @private
+ */
 mbi.app.shared.sitemap_home_df_;
 
 
@@ -293,6 +308,22 @@ mbi.app.shared.getHelpSiteMap = function(opt_force) {
     });
   }
   return mbi.app.shared.sitemap_help_df_;
+};
+
+
+/**
+ * @param {number=} opt_force 1. build if necessary, 2. force build
+ * @return {!goog.async.Deferred}
+ */
+mbi.app.shared.getWhatIsSiteMap = function(opt_force) {
+  if (!mbi.app.shared.what_is_df_ || opt_force == 2) {
+    mbi.app.shared.what_is_df_ =
+        mbi.app.shared.getSiteMap_(mbi.app.base.WHAT_IS_PAGE_ID, opt_force);
+    mbi.app.shared.what_is_df_.addCallback(function(map) {
+      mbi.app.shared.what_is_map = map;
+    });
+  }
+  return mbi.app.shared.what_is_df_;
 };
 
 

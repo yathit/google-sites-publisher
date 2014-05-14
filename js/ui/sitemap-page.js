@@ -117,6 +117,7 @@ mbi.ui.SiteMapPage.prototype.updateSitemapModel = function(opt_force) {
   dfs.push(mbi.app.shared.getTopicSiteMap(opt_force));
   dfs.push(mbi.app.shared.getModuleSiteMap(opt_force));
   dfs.push(mbi.app.shared.getHelpSiteMap(opt_force));
+  dfs.push(mbi.app.shared.getWhatIsSiteMap(opt_force));
   var df = new goog.async.DeferredList(dfs);
   df.addCallback(function(res) {
     this.site_map = new mbi.data.SiteMap('/', 'MBInfo');
@@ -194,6 +195,10 @@ mbi.ui.SiteMapPage.prototype.uploadSiteMap = function(e) {
   }, this));
   dfs.push(mbi.app.shared.getHelpSiteMap(2).addCallback(function(map) {
     upload.call(this, map, mbi.app.base.SITEMAP_HELP_URL);
+    return map;
+  }, this));
+  dfs.push(mbi.app.shared.getWhatIsSiteMap(2).addCallback(function(map) {
+    upload.call(this, map, mbi.app.base.WHAT_IS_URL);
     return map;
   }, this));
   dfs.push(mbi.app.shared.getHomeSiteMap().addCallback(function(map) {

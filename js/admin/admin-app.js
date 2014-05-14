@@ -254,6 +254,8 @@ mbi.app.AdminApp.prototype.handleHistory = function(e) {
       sitemap = mbi.app.shared.module_map;
     } else if (/^\/Help/.test(path)) {
       sitemap = mbi.app.shared.help_map;
+    } else if (/^\/what-is/.test(path)) {
+      sitemap = mbi.app.shared.what_is_map;
     }
     var ok = this.navigateWikiUrl(sitemap, url);
     if (!ok) {
@@ -405,6 +407,10 @@ mbi.app.AdminApp.prototype.initWiki = function() {
           this.history.setToken('page' + path);
           return true;
         } else if (goog.string.startsWith(path, '/Help')) {
+          e.preventDefault();
+          this.history.setToken('page' + path);
+          return true;
+        } else if (goog.string.startsWith(path, '/what-is')) {
           e.preventDefault();
           this.history.setToken('page' + path);
           return true;
