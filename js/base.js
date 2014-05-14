@@ -36,7 +36,7 @@ mbi.app.base.VERSION = mbi.app.base.VERSION_MAJOR + '.' +
  * @const
  * @type {string}
  */
-mbi.app.base.PREVIOUS_STABLE = '1.5.15';
+mbi.app.base.PREVIOUS_STABLE = '1.6.0';
 
 
 /**
@@ -51,7 +51,7 @@ mbi.app.base.VERSION_STABLE = '1.6.0';
  * @const
  * @type {string}
  */
-mbi.app.base.VERSION_BETA = '1.6.0';
+mbi.app.base.VERSION_BETA = '1.6.1';
 
 
 /**

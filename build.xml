@@ -13,7 +13,7 @@
     <property name="html-debug.bk" value="mbinfo" description="bucket name for static web site for debugging"/>
     <property name="mbi-app-ver-major" value="1"/>
     <property name="mbi-app-ver-minor" value="6"/>
-    <property name="mbi-app-ver-patch" value="0"/>
+    <property name="mbi-app-ver-patch" value="1"/>
     <property name="mbi-app-ver" value="${mbi-app-ver-major}.${mbi-app-ver-minor}.${mbi-app-ver-patch}"/>
     <property name="out.fn" value="mbi-app-${mbi-app-ver}.js"/>
     <property name="data.fn" value="data-${site-name}${data-version}.js"/>
